@@ -1,10 +1,18 @@
 package com.project.exam_prep.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 
 @Entity
-@Table(name = "answwer")
+@Table(name = "answer")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Answer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,40 +23,7 @@ public class Answer {
     private Boolean isCorrect;
 
     @ManyToOne
-    @JoinColumn(name = "questionId", referencedColumnName = "id")
+    @JoinColumn(name = "question_id", referencedColumnName = "id")
     private Question question;
-
-    // Getters and Setters
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getAnswerText() {
-        return answerText;
-    }
-
-    public void setAnswerText(String answerText) {
-        this.answerText = answerText;
-    }
-
-    public Boolean getIsCorrect() {
-        return isCorrect;
-    }
-
-    public void setIsCorrect(Boolean isCorrect) {
-        this.isCorrect = isCorrect;
-    }
-
-    public Question getQuestion() {
-        return question;
-    }
-
-    public void setQuestion(Question question) {
-        this.question = question;
-    }
 }
 

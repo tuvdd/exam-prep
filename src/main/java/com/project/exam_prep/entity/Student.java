@@ -1,31 +1,33 @@
 package com.project.exam_prep.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Set;
 
 @Entity
 @Table(name = "student")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Student {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(length = 10)
     private int id;
 
-    @Column(name = "studentCode", nullable = true, unique = true)
+    @Column(name = "student_code", nullable = true, unique = true)
     private String studentCode;
 
     @OneToOne
-    @JoinColumn(name = "userId", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
 
-    @ManyToMany
-    @JoinTable(
-            name = "Student_Class",
-            joinColumns = @JoinColumn(name = "studentId"),
-            inverseJoinColumns = @JoinColumn(name = "classId")
-    )
+    @ManyToMany(mappedBy = "students")
     private Set<Class> classes;
 
     @ManyToMany
@@ -36,43 +38,6 @@ public class Student {
     )
     private Set<Quiz> quizzes;
 
-    public Set<Class> getClasses() {
-        return classes;
-    }
-
-    public void setClasses(Set<Class> classes) {
-        this.classes = classes;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getStudentCode() {
-        return studentCode;
-    }
-
-    public void setStudentCode(String studentCode) {
-        this.studentCode = studentCode;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Set<Quiz> getQuizzes() {
-        return quizzes;
-    }
-
-    public void setQuizzes(Set<Quiz> quizzes) {
-        this.quizzes = quizzes;
-    }
+    @OneToMany(mappedBy = "student")
+    private Set<Result> results;
 }

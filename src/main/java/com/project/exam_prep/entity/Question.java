@@ -2,12 +2,20 @@ package com.project.exam_prep.entity;
 
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name = "question")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,53 +32,5 @@ public class Question {
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Answer> answers;
-
-    public List<Answer> getAnswers() {
-        return answers;
-    }
-
-    public void setAnswers(List<Answer> answers) {
-        this.answers = answers;
-    }
-
-    public List<QuestionImage> getQuestionImages() {
-        return questionImages;
-    }
-
-    public void setQuestionImages(List<QuestionImage> questionImages) {
-        this.questionImages = questionImages;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getQuestionText() {
-        return questionText;
-    }
-
-    public void setQuestionText(String questionText) {
-        this.questionText = questionText;
-    }
-
-    public String getQuestionType() {
-        return questionType;
-    }
-
-    public void setQuestionType(String questionType) {
-        this.questionType = questionType;
-    }
-
-    public Set<QuestionSet> getQuestionSets() {
-        return questionSets;
-    }
-
-    public void setQuestionSets(Set<QuestionSet> questionSets) {
-        this.questionSets = questionSets;
-    }
 }
 
