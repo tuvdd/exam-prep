@@ -16,11 +16,11 @@ import lombok.Setter;
 public class Answer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     @Column(nullable = false)
     private String answerText;
     @Column(nullable = false)
-    private Boolean isCorrect;
+    private boolean isCorrect;
 
     @ManyToOne
     @JoinColumn(name = "question_id", referencedColumnName = "id")

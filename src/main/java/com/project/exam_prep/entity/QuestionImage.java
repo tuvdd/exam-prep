@@ -16,7 +16,7 @@ import lombok.Setter;
 public class QuestionImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     private String name;
     @Column(nullable = false)

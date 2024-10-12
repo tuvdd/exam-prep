@@ -18,7 +18,7 @@ public class Admin {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(length = 10)
-    private int id;
+    private Integer id;
 
     @Column(name = "created_at", nullable = false)
     @Temporal(TemporalType.DATE)

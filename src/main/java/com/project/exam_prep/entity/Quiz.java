@@ -19,7 +19,7 @@ import java.util.Set;
 public class Quiz {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     @Column(unique = true, nullable = false)
     private String title;
 

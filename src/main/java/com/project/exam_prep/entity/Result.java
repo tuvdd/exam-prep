@@ -19,7 +19,7 @@ import java.util.Set;
 public class Result {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     private double score;
     private Timestamp startTime;

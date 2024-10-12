@@ -19,7 +19,7 @@ public class Teacher {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(length = 10)
-    private int id;
+    private Integer id;
     @Column(name = "teacher_code", nullable =true, unique = true)
     private String teacherCode;
 
