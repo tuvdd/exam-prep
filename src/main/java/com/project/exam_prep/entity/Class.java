@@ -2,78 +2,42 @@ package com.project.exam_prep.entity;
 
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Set;
 
 @Entity
+@Table(name = "class")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Class {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     @Column(nullable = false, unique = true)
     private String name;
     @Column(nullable = false)
     private Integer grade;
 
-
-    @ManyToMany(mappedBy = "classes")
+    @ManyToMany
+    @JoinTable(
+            name = "class_student",
+            joinColumns = @JoinColumn(name = "class_id"),
+            inverseJoinColumns = @JoinColumn(name = "student_id")
+    )
     private Set<Student> students;
 
     @ManyToMany
     @JoinTable(
-            name = "ExaminationSetter_Class",
-            joinColumns = @JoinColumn(name = "classId"),
-            inverseJoinColumns = @JoinColumn(name = "examinationSetterId")
+            name = "class_teacher",
+            joinColumns = @JoinColumn(name = "class_id"),
+            inverseJoinColumns = @JoinColumn(name = "teacher_id")
     )
-    private Set<ExaminationSetter> examinationSetters;
-
-
-
-    public void setStudents(Set<Student> students) {
-        this.students = students;
-    }
-
-    public Set<ExaminationSetter> getExaminationSetters() {
-        return examinationSetters;
-    }
-
-    public void setExaminationSetters(Set<ExaminationSetter> examinationSetters) {
-        this.examinationSetters = examinationSetters;
-    }
-
-    // Getters and Setters
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Integer getGrade() {
-        return grade;
-    }
-
-    public void setGrade(Integer grade) {
-        this.grade = grade;
-    }
-
-    public Set<Student> getStudents() {
-        return students;
-    }
-
-    public void setCandidates(Set<Student> students) {
-        this.students = students;
-    }
-
-
+    private Set<Teacher> teachers;
 }
 

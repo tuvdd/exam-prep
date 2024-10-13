@@ -1,16 +1,23 @@
 package com.project.exam_prep.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name = "questionSet")
+@Table(name = "question_set")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class QuestionSet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @Column(length = 255, nullable = false)
     private String title;
@@ -19,66 +26,18 @@ public class QuestionSet {
     private String subject;
 
     @ManyToOne
-    @JoinColumn(name = "examinationSetterId", referencedColumnName = "id")
-    private ExaminationSetter examinationSetter;
+    @JoinColumn(name = "teacher_id", referencedColumnName = "id")
+    private Teacher teacher;
 
     @ManyToMany
     @JoinTable(
-            name = "QuestionSetQuestion",
-            joinColumns = @JoinColumn(name = "questionSetId"),
-            inverseJoinColumns = @JoinColumn(name = "questionId")
+            name = "question_set_question",
+            joinColumns = @JoinColumn(name = "question_set_id"),
+            inverseJoinColumns = @JoinColumn(name = "question_id")
     )
     private Set<Question> questions;
 
     @OneToOne
     @JoinColumn(name = "quiz_id")
     private Quiz quiz;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getSubject() {
-        return subject;
-    }
-
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
-
-    public ExaminationSetter getExaminationSetter() {
-        return examinationSetter;
-    }
-
-    public void setExaminationSetter(ExaminationSetter examinationSetter) {
-        this.examinationSetter = examinationSetter;
-    }
-
-    public Set<Question> getQuestions() {
-        return questions;
-    }
-
-    public void setQuestions(Set<Question> questions) {
-        this.questions = questions;
-    }
-
-    public Quiz getQuiz() {
-        return quiz;
-    }
-
-    public void setQuiz(Quiz quiz) {
-        this.quiz = quiz;
-    }
 }
