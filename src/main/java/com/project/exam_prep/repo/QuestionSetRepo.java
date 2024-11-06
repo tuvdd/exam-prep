@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
+
 @Repository
 public interface QuestionSetRepo extends JpaRepository<QuestionSet, Integer> {
     @Query("select new com.project.exam_prep.dto.QuestionSetDto(entity) from QuestionSet as entity")
@@ -15,5 +17,5 @@ public interface QuestionSetRepo extends JpaRepository<QuestionSet, Integer> {
     List<QuestionSet> getAllQuestionSetByTeacherId(Integer teacherId);
 
     @Query("select new com.project.exam_prep.dto.QuestionSetDto(entity) from QuestionSet entity where entity.id = ?1")
-    QuestionSet getQuestionSetById(Integer id);
+    Optional<QuestionSet> getQuestionSetById(Integer id);
 }
