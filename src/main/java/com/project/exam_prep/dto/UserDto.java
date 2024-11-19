@@ -19,6 +19,7 @@ public class UserDto {
     private String phoneNumber;
     private String address;
     private String role;
+    private boolean is_active;
 
     public UserDto(User user){
         if(user != null) {
@@ -32,6 +33,7 @@ public class UserDto {
             this.phoneNumber = user.getPhoneNumber();
             this.address = user.getAddress();
             this.role = user.getRole();
+            this.is_active = user.is_active();
         }
     }
 }

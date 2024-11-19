@@ -1,15 +1,16 @@
 package com.project.exam_prep.service;
 
 import com.project.exam_prep.dto.UserDto;
+import com.project.exam_prep.entity.User;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface UserService {
 
     List<UserDto> getAllUser();
     boolean addUser(UserDto userDto);
-    boolean deleteUser(Integer userId);
-    UserDto updateUser (UserDto userDto);
+    boolean banUser(Integer userId);
+    boolean unBanUser(Integer userId);
+    User updateUser (UserDto userDto);
     UserDto login(String username, String password);
 }
