@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
         }
 
         String encodePassword = encoder.encode(userDto.getPassword());
-        if(userRepo.existsUserByUsernameAndPassword(userDto.getUsername(), encodePassword).isPresent()) {
+        if(userRepo.existsUserByUsernameAndPassword(userDto.getUsername(), encodePassword)) {
             return false;
         }
 
@@ -52,32 +52,44 @@ public class UserServiceImpl implements UserService {
             userDto.getEmail(),
             userDto.getPhoneNumber(),
             userDto.getAddress(),
-            userDto.getRole()
+            userDto.getRole(),
+                true
         );
         userRepo.save(user);
         return true;
     }
 
     @Override
-    public boolean deleteUser(Integer userId) {
+    public boolean banUser(Integer userId) {
         if(userRepo.existsById(userId)) {
-            userRepo.deleteById(userId);
+            User user = userRepo.findById(userId).get();
+            user.set_active(false);
+            userRepo.save(user);
             return true;
         }
         else return false;
     }
 
     @Override
-    public UserDto updateUser(UserDto userDto) {
+    public boolean unBanUser(Integer userId) {
+        if(userRepo.existsById(userId)) {
+            User user = userRepo.findById(userId).get();
+            user.set_active(true);
+            userRepo.save(user);
+            return true;
+        }
+        else return false;
+    }
+
+    @Override
+    public User updateUser(UserDto userDto) {
         if (userDto.getUsername() == null || userDto.getPassword() == null) {
             return null;
         }
         String encodePassword = encoder.encode(userDto.getPassword());
-        Optional<User> userOptional = userRepo.getUserByUsernameAndPassword(userDto.getUsername(), encodePassword);
-        if(userOptional.isEmpty()) {
-            return null;
-        }
-        User user = userOptional.get();
+
+        User user = userRepo.getUserById(userDto.getId());
+        if(user == null) return null;
         user.setPassword(encodePassword);
         user.setFirstName(userDto.getFirstName());
         user.setLastName(userDto.getLastName());
@@ -88,19 +100,24 @@ public class UserServiceImpl implements UserService {
         user.setRole(user.getRole());
 
         userRepo.save(user);
-        return new UserDto(user);
+        return user;
     }
 
     @Override
     public UserDto login(String username, String password) {
+        System.out.println(username + password);
         if (username == null || password == null) {
+
             return null;
         }
-        String encodePassword = encoder.encode(password);
-        Optional<User> userOptional = userRepo.getUserByUsernameAndPassword(username, encodePassword);
-        if(userOptional.isEmpty()) {
+
+        User user = userRepo.getUserByUsername(username);
+
+        if(user == null || !user.is_active() || !encoder.matches(password, user.getPassword())) {
             return null;
         }
-        return new UserDto(userOptional.get());
+
+        return new UserDto(user);
     }
+
 }

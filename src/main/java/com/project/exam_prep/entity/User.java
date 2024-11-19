@@ -43,4 +43,6 @@ public class User {
 
     @Column(length = 255)
     private String role;
+    @Column(nullable = false)
+    private boolean is_active;
 }
