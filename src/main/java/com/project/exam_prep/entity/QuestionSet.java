@@ -36,8 +36,4 @@ public class QuestionSet {
             inverseJoinColumns = @JoinColumn(name = "question_id")
     )
     private Set<Question> questions;
-
-    @OneToOne
-    @JoinColumn(name = "quiz_id")
-    private Quiz quiz;
 }

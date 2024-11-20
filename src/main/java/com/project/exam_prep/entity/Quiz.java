@@ -29,13 +29,26 @@ public class Quiz {
     @Column(nullable = false)
     private Timestamp endTime;
 
+    //public or private
+    @Column(nullable = false)
+    private String type;
+
+    //test or practice
+    @Column(nullable = false)
+    private String mode;
+
     @ManyToMany(mappedBy = "quizzes")
     private Set<Student> students;
 
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Result> results;
 
-    @OneToOne(mappedBy = "quiz")
+    @OneToOne
+    @JoinColumn(name = "question_set_id")
     private QuestionSet questionSet;
+
+    @ManyToOne
+    @JoinColumn(name = "teacher_id")
+    private Teacher teacher;
 }
 

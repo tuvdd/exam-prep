@@ -2,6 +2,8 @@ package com.project.exam_prep.dto;
 
 import com.project.exam_prep.entity.Question;
 import com.project.exam_prep.entity.QuestionSet;
+import com.project.exam_prep.repo.QuestionRepo;
+import com.project.exam_prep.repo.TeacherRepo;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -19,8 +22,13 @@ public class QuestionSetDto {
     private String title;
     private String subject;
     private Integer teacherId;
-    private List<QuestionDto> questions;
-    private Integer quizId;
+    private Set<QuestionDto> questions;
+
+    private static TeacherRepo teacherRepo;
+
+    public static void setRepo(TeacherRepo teacherRepo){
+        QuestionSetDto.teacherRepo = teacherRepo;
+    }
 
     public QuestionSetDto(QuestionSet questionSet) {
         if(questionSet != null) {
@@ -29,16 +37,24 @@ public class QuestionSetDto {
             this.subject = questionSet.getSubject();
             this.teacherId = questionSet.getTeacher().getId();
             this.questions = getQuestions(questionSet);
-            this.quizId = questionSet.getQuiz().getId();
         }
     }
 
-    public List<QuestionDto> getQuestions(QuestionSet questionSet) {
-        List<QuestionDto> result = new ArrayList<>();
+    public Set<QuestionDto> getQuestions(QuestionSet questionSet) {
+        Set<QuestionDto> result = new HashSet<>();
         Set<Question> set = questionSet.getQuestions();
         for(Question question: set) {
             result.add(new QuestionDto(question));
         }
         return result;
+    }
+
+    public static QuestionSet convert(QuestionSetDto questionSetDto) {
+        return new QuestionSet(
+                questionSetDto.getId(),
+                questionSetDto.getTitle(),
+                questionSetDto.getSubject(),
+                teacherRepo.findById(questionSetDto.getTeacherId()).orElse(null),
+                questionSetDto.getQuestions().stream().map(QuestionDto::convert).collect(Collectors.toSet()));
     }
 }

@@ -13,6 +13,7 @@ public interface QuestionRepo extends JpaRepository<Question, Integer> {
     @Query("select new com.project.exam_prep.dto.QuestionDto(entity) from Question as entity")
     List<QuestionDto> getAllQuestions();
 
+    List<Question> findAllByTeacherId(Integer teacherId);
 //    @Query("select new com.project.exam_prep.dto.QuestionDto(entity) from Question as entity")
 //    List<QuestionDto> getAllQuestionsByQuestionSetId();
 }

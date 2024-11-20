@@ -23,6 +23,7 @@ public class QuestionDto {
     private Set<Integer> questionSetIds;
     private List<QuestionImageDto> questionImages;
     private List<AnswerDto> answers;
+    private Integer teacherId;
 
     // Constructor
 
@@ -34,6 +35,7 @@ public class QuestionDto {
             this.questionSetIds = getListQuestionSetId(question);
             this.questionImages = getListQuestionImage(question);
             this.answers = getListAnswer(question);
+            this.teacherId = question.getTeacher().getId();
         }
     }
 
@@ -62,5 +64,29 @@ public class QuestionDto {
             result.add(new AnswerDto(answer));
         }
         return result;
+    }
+
+    public static Question convert(QuestionDto questionDto) {
+        Question question = new Question();
+        question.setId(questionDto.getId());
+        question.setQuestionText(questionDto.getQuestionText());
+        question.setQuestionType(questionDto.getQuestionType());
+
+        List<QuestionImage> questionImages = new ArrayList<>();
+        for(QuestionImageDto questionImageDto : questionDto.getQuestionImages()) {
+            QuestionImage questionImage = new QuestionImage(questionImageDto.getId(), questionImageDto.getName(),
+                    questionImageDto.getImageUrl(), question);
+            questionImages.add(questionImage);
+        }
+        question.setQuestionImages(questionImages);
+
+        List<Answer> answers = new ArrayList<>();
+        for(AnswerDto answerDto : questionDto.getAnswers()) {
+            Answer answer = new Answer(answerDto.getId(), answerDto.getAnswerText(),
+                    answerDto.isCorrect(), question);
+            answers.add(answer);
+        }
+        question.setAnswers(answers);
+        return question;
     }
 }
