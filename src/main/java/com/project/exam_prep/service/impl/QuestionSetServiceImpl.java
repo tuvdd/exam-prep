@@ -15,10 +15,8 @@ import com.project.exam_prep.service.QuestionSetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class QuestionSetServiceImpl implements QuestionSetService {
@@ -30,7 +28,7 @@ public class QuestionSetServiceImpl implements QuestionSetService {
     @Autowired
     private QuizRepo quizRepo;
     @Override
-    public QuestionSetDto addQuestionSet(QuestionSetDto questionSetDto) {
+    public boolean addQuestionSet(QuestionSetDto questionSetDto) {
         QuestionSet newQuestionSet = new QuestionSet();
         newQuestionSet.setId(questionSetDto.getId());
         newQuestionSet.setTitle(questionSetDto.getTitle());
@@ -39,36 +37,34 @@ public class QuestionSetServiceImpl implements QuestionSetService {
 
         Set<Question> questionSet = new HashSet<>();
         for(QuestionDto questionDto: questionSetDto.getQuestions()) {
-
-            Question newQuestion = new Question();
-            newQuestion.setId(questionDto.getId());
-            newQuestion.setQuestionText(questionDto.getQuestionText());
-            newQuestion.setQuestionType(questionDto.getQuestionType());
-
-            List<QuestionImage> questionImages = new ArrayList<>();
-            for(QuestionImageDto questionImageDto : questionDto.getQuestionImages()) {
-                QuestionImage questionImage = new QuestionImage(questionImageDto.getId(), questionImageDto.getName(),
-                        questionImageDto.getImageUrl(),newQuestion);
-                questionImages.add(questionImage);
-            }
-            newQuestion.setQuestionImages(questionImages);
-
-            List<Answer> answers = new ArrayList<>();
-            for(AnswerDto answerDto : questionDto.getAnswers()) {
-                Answer answer = new Answer(answerDto.getId(), answerDto.getAnswerText(),
-                        answerDto.isCorrect(),newQuestion);
-                answers.add(answer);
-            }
-            newQuestion.setAnswers(answers);
-            newQuestion.setQuestionSets(null);
-            questionSet.add(newQuestion);
+//
+//            Question newQuestion = new Question();
+//            newQuestion.setId(questionDto.getId());
+//            newQuestion.setQuestionText(questionDto.getQuestionText());
+//            newQuestion.setQuestionType(questionDto.getQuestionType());
+//
+//            List<QuestionImage> questionImages = new ArrayList<>();
+//            for(QuestionImageDto questionImageDto : questionDto.getQuestionImages()) {
+//                QuestionImage questionImage = new QuestionImage(questionImageDto.getId(), questionImageDto.getName(),
+//                        questionImageDto.getImageUrl(),newQuestion);
+//                questionImages.add(questionImage);
+//            }
+//            newQuestion.setQuestionImages(questionImages);
+//
+//            List<Answer> answers = new ArrayList<>();
+//            for(AnswerDto answerDto : questionDto.getAnswers()) {
+//                Answer answer = new Answer(answerDto.getId(), answerDto.getAnswerText(),
+//                        answerDto.isCorrect(),newQuestion);
+//                answers.add(answer);
+//            }
+//            newQuestion.setAnswers(answers);
+//            newQuestion.setQuestionSets(null);
+            questionSet.add(QuestionDto.convert(questionDto));
         }
 
         newQuestionSet.setQuestions(questionSet);
-        newQuestionSet.setQuiz(quizRepo.getQuizById(questionSetDto.getQuizId()));
-
-
-        return new QuestionSetDto(questionSetRepo.save(newQuestionSet));
+        QuestionSet result = questionSetRepo.save(newQuestionSet);
+        return true;
     }
 
     @Override
@@ -77,7 +73,7 @@ public class QuestionSetServiceImpl implements QuestionSetService {
         for(QuestionSet questionSet: questionSetRepo.getAllQuestionSet()) {
             result.add(new QuestionSetDto(questionSet));
         }
-        return result ;
+        return result;
     }
 
     @Override
@@ -87,6 +83,20 @@ public class QuestionSetServiceImpl implements QuestionSetService {
             result.add(new QuestionSetDto(questionSet));
         }
         return result ;
+    }
+
+    @Override
+    public QuestionSetDto updateQuestionSet(QuestionSetDto questionSetDto) {
+        Optional<QuestionSet> existingQuestionSet = questionSetRepo
+                .findById(questionSetDto.getId());
+        return existingQuestionSet.map(questionSet -> {
+            questionSet.setTitle(questionSetDto.getTitle());
+            questionSet.setSubject(questionSetDto.getSubject());
+            questionSet.setQuestions(questionSetDto.getQuestions().stream().map(QuestionDto::convert).collect(Collectors.toSet()));
+            QuestionSet updatedQuestionSet = questionSetRepo.save(questionSet);
+            return new QuestionSetDto(updatedQuestionSet);
+        }).orElse(null);
+
     }
 
     @Override
