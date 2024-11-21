@@ -35,7 +35,7 @@ public class QuestionController {
     @GetMapping
     public ResponseEntity<?> getAllQuestions() {
         List<QuestionDto> questionDtos = questionService.getAllQuestions();
-        return ResponseEntity.ok(getAllQuestions());
+        return ResponseEntity.ok(questionDtos);
     }
 
     @GetMapping("/{questionId}")
