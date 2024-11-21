@@ -36,4 +36,21 @@ public class UserDto {
             this.is_active = user.is_active();
         }
     }
+
+    public static User convert(UserDto userDto) {
+        User user = new User(
+                userDto.getId(),
+                userDto.getUsername(),
+                userDto.getPassword(),
+                userDto.getFirstName(),
+                userDto.getLastName(),
+                userDto.getProfilePicture(),
+                userDto.getEmail(),
+                userDto.getPhoneNumber(),
+                userDto.getAddress(),
+                userDto.getRole(),
+                userDto.is_active()
+        );
+        return user;
+    }
 }

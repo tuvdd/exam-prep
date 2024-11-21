@@ -17,9 +17,9 @@ public class ResultDto {
     private double score;
     private Timestamp startTime;
     private Timestamp endTime;
-    private Integer studentId;
+//    private Integer studentId;
     private Integer quizId;
-
+    private StudentDto studentDto;
     private static StudentRepo studentRepo;
     private static QuizRepo quizRepo;
 
@@ -33,17 +33,21 @@ public class ResultDto {
         this.score = result.getScore();
         this.startTime = result.getStartTime();
         this.endTime = result.getEndTime();
-        this.studentId = result.getStudent().getId();
+//        this.studentId = result.getStudent().getId();
         this.quizId = result.getQuiz().getId();
+        this.studentDto = new StudentDto(result.getStudent());
     }
 
     public static Result convert(ResultDto resultDto) {
+
         return new Result(
                 resultDto.getId(),
                 resultDto.getScore(),
                 resultDto.getStartTime(),
                 resultDto.getEndTime(),
-                studentRepo.findById(resultDto.getStudentId()).orElse(null),
+                StudentDto.covert(resultDto.getStudentDto()),
+//                studentRepo.findById(resultDto.getStudentId()).orElse(null),
                 quizRepo.findById(resultDto.getQuizId()).orElse(null));
+
     }
 }
