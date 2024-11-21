@@ -1,6 +1,6 @@
 package com.project.exam_prep.controller;
 
-import com.project.exam_prep.dto.LoginDTO;
+import com.project.exam_prep.dto.LoginDto;
 import com.project.exam_prep.dto.UserDto;
 import com.project.exam_prep.service.AdminService;
 import com.project.exam_prep.service.StudentService;
@@ -26,7 +26,7 @@ public class UserController {
     private AdminService adminService;
 
     @PostMapping()
-    public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO) {
+    public ResponseEntity<?> login(@RequestBody LoginDto loginDTO) {
         UserDto userDto = userService.login(loginDTO.getUsername(), loginDTO.getPassword());
         System.out.println(userDto);
         if(userDto == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
