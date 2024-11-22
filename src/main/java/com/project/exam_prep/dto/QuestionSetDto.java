@@ -22,7 +22,7 @@ public class QuestionSetDto {
     private String title;
     private String subject;
     private Integer teacherId;
-    private Set<QuestionDto> questions;
+    private Set<QuestionDto> questions = new HashSet<>();
 
     private static TeacherRepo teacherRepo;
 

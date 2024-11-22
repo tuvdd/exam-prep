@@ -3,7 +3,9 @@ package com.project.exam_prep.dto;
 import com.project.exam_prep.entity.Quiz;
 import com.project.exam_prep.entity.Result;
 import com.project.exam_prep.entity.Student;
+import com.project.exam_prep.repo.QuestionSetRepo;
 import com.project.exam_prep.repo.StudentRepo;
+import com.project.exam_prep.repo.TeacherRepo;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,16 +26,20 @@ public class QuizDto {
     private Timestamp endTime;
     private String type;
     private String mode;
-    private Set<Integer> studentIds;
-    private Set<ResultDto> results;
+    private Set<Integer> studentIds = new HashSet<>();
+    private Set<ResultDto> results = new HashSet<>();
     private Integer questionSetId;
     private Integer teacherId;
 
     private static StudentRepo studentRepo;
+    private static TeacherRepo teacherRepo;
+    private static QuestionSetRepo questionSetRepo;
 
     // Inject StudentRepo vào QuizConverter
-    public static void setRepo(StudentRepo studentRepo) {
+    public static void setRepo(StudentRepo studentRepo, TeacherRepo teacherRepo, QuestionSetRepo questionSetRepo) {
         QuizDto.studentRepo = studentRepo;
+        QuizDto.teacherRepo = teacherRepo;
+        QuizDto.questionSetRepo = questionSetRepo;
     }
 
     public QuizDto (Quiz quiz) {
@@ -82,12 +88,14 @@ public class QuizDto {
                 .map(studentId -> studentRepo.findById(studentId).orElse(null))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toSet());
-
         quiz.setStudents(students);
 
         Set<Result> results = quizDto.getResults().stream()
                 .map(ResultDto::convert).collect(Collectors.toSet());
+        quiz.setResults(results);
 
+        quiz.setTeacher(teacherRepo.findById(quizDto.getTeacherId()).orElse(null));
+        quiz.setQuestionSet(questionSetRepo.findById(quizDto.getQuestionSetId()).orElse(null));
         return quiz;
     }
 }

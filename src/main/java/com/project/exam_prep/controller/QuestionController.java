@@ -2,6 +2,7 @@ package com.project.exam_prep.controller;
 
 import com.project.exam_prep.dto.QuestionDto;
 import com.project.exam_prep.dto.StudentDto;
+import com.project.exam_prep.repo.QuestionRepo;
 import com.project.exam_prep.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,8 @@ import java.util.Optional;
 public class QuestionController {
     @Autowired
     private QuestionService questionService;
+    @Autowired
+    private QuestionRepo questionRepo;
 
     @PostMapping("/save")
     public ResponseEntity<?> saveQuestion(@RequestBody QuestionDto questionDto) {
@@ -56,7 +59,7 @@ public class QuestionController {
         return ResponseEntity.ok(questions);
     }
 
-    @PostMapping("/update")
+    @PutMapping("/update")
     public ResponseEntity<QuestionDto> updateQuestion(@RequestBody QuestionDto questionDto) {
         QuestionDto updatedQuestionDto = questionService.updateQuestion(questionDto);
 
@@ -67,7 +70,7 @@ public class QuestionController {
         }
     }
 
-    @PostMapping("/delete/{questionId}")
+    @DeleteMapping("/delete/{questionId}")
     public ResponseEntity<String> deleteQuestionById(@PathVariable Integer questionId) {
         boolean deleted = questionService.deleteQuestionById(questionId);
 

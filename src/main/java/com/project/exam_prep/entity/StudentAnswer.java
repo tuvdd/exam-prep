@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -24,7 +25,7 @@ public class StudentAnswer {
     @ElementCollection
     @CollectionTable(name = "chosen_answer")
     @Column(name = "selected_answer")
-    private Set<String> selectedAnswers;
+    private Set<String> selectedAnswers = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "student_id", referencedColumnName = "id")

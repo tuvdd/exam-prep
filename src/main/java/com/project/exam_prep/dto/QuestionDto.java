@@ -4,6 +4,7 @@ import com.project.exam_prep.entity.Answer;
 import com.project.exam_prep.entity.Question;
 import com.project.exam_prep.entity.QuestionImage;
 import com.project.exam_prep.entity.QuestionSet;
+import com.project.exam_prep.repo.TeacherRepo;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,10 +21,16 @@ public class QuestionDto {
     private Integer id;
     private String questionText;
     private String questionType;
-    private Set<Integer> questionSetIds;
-    private List<QuestionImageDto> questionImages;
-    private List<AnswerDto> answers;
+    private Set<Integer> questionSetIds = new HashSet<>();
+    private List<QuestionImageDto> questionImages = new ArrayList<>();
+    private List<AnswerDto> answers = new ArrayList<>();
     private Integer teacherId;
+
+    private static TeacherRepo teacherRepo;
+
+    public static void setRepo(TeacherRepo teacherRepo){
+        QuestionDto.teacherRepo = teacherRepo;
+    }
 
     // Constructor
 
@@ -87,6 +94,7 @@ public class QuestionDto {
             answers.add(answer);
         }
         question.setAnswers(answers);
+        question.setTeacher(teacherRepo.findById(questionDto.getTeacherId()).orElse(null));
         return question;
     }
 }

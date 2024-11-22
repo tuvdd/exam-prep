@@ -4,6 +4,7 @@ import com.project.exam_prep.dto.QuestionSetDto;
 import com.project.exam_prep.entity.QuestionSet;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface QuestionSetService {
 
@@ -12,4 +13,5 @@ public interface QuestionSetService {
     List<QuestionSetDto> getAllQuestionSetByTeacherId(Integer teacherId);
     QuestionSetDto updateQuestionSet(QuestionSetDto questionSetDto);
     boolean deleteQuestionSetById(Integer id);
+    Optional<QuestionSetDto> getQuestionSetById(Integer id);
 }
