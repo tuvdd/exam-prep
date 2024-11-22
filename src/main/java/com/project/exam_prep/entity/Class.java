@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -30,7 +31,7 @@ public class Class {
             joinColumns = @JoinColumn(name = "class_id"),
             inverseJoinColumns = @JoinColumn(name = "student_id")
     )
-    private Set<Student> students;
+    private Set<Student> students = new HashSet<>();
 
     @ManyToMany
     @JoinTable(
@@ -38,6 +39,6 @@ public class Class {
             joinColumns = @JoinColumn(name = "class_id"),
             inverseJoinColumns = @JoinColumn(name = "teacher_id")
     )
-    private Set<Teacher> teachers;
+    private Set<Teacher> teachers = new HashSet<>();
 }
 

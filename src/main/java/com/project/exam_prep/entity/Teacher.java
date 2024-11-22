@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -32,8 +34,8 @@ public class Teacher {
     private User user;
 
     @OneToMany(mappedBy = "teacher")
-    private List<QuestionSet> questionSets;
+    private List<QuestionSet> questionSets = new ArrayList<>();
 
     @ManyToMany(mappedBy = "teachers")
-    private Set<Class> classes;
+    private Set<Class> classes = new HashSet<>();
 }

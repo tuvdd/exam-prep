@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/quizzes")
+@RequestMapping("/api/quiz")
 public class QuizController {
 
     @Autowired

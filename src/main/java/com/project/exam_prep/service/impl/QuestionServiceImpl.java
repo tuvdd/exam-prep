@@ -1,8 +1,6 @@
 package com.project.exam_prep.service.impl;
 
-import com.project.exam_prep.dto.AnswerDto;
 import com.project.exam_prep.dto.QuestionDto;
-import com.project.exam_prep.dto.QuestionImageDto;
 import com.project.exam_prep.entity.Answer;
 import com.project.exam_prep.entity.Question;
 import com.project.exam_prep.entity.QuestionImage;
@@ -15,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class QuestionServiceImpl implements QuestionService {
@@ -27,6 +26,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public boolean addQuestion(QuestionDto questionDto) {
+        QuestionDto.setRepo(teacherRepo);
         Question newQuestion = QuestionDto.convert(questionDto);
         newQuestion.setQuestionSets(null);
         questionRepo.save(newQuestion);
@@ -58,21 +58,24 @@ public class QuestionServiceImpl implements QuestionService {
     public QuestionDto updateQuestion(QuestionDto questionDto) {
         Optional<Question> existQuestion = questionRepo.findById(questionDto.getId());
         return existQuestion.map(question -> {
-                question.setQuestionText(questionDto.getQuestionText());
-                question.setQuestionType(question.getQuestionType());
-                question.setQuestionImages(questionDto.getQuestionImages().stream().map(questionImageDto -> new QuestionImage(
-                        questionImageDto.getId(),
-                        questionImageDto.getName(),
-                        questionImageDto.getImageUrl(),
-                        question)).toList());
-                question.setAnswers(questionDto.getAnswers().stream().map(answerDto -> new Answer(
-                        answerDto.getId(),
-                        answerDto.getAnswerText(),
-                        answerDto.isCorrect(),
-                        question
-                )).toList());
-                Question newQuestion = questionRepo.save(question);
-                return new QuestionDto(newQuestion);
+            question.setQuestionText(questionDto.getQuestionText());
+            question.setQuestionType(questionDto.getQuestionType());
+            ArrayList<QuestionImage> updatedQuestionImages = new ArrayList<>(questionDto.getQuestionImages().stream().map(questionImageDto -> new QuestionImage(
+                    questionImageDto.getId(),
+                    questionImageDto.getName(),
+                    questionImageDto.getImageUrl(),
+                    question)).toList());
+            question.getQuestionImages().clear();
+            question.getQuestionImages().addAll(updatedQuestionImages);
+            ArrayList<Answer> updatedAnswers = new ArrayList<>(questionDto.getAnswers().stream().map(answerDto -> new Answer(
+                    answerDto.getId(),
+                    answerDto.getAnswerText(),
+                    answerDto.isCorrect(),
+                    question)).toList());
+            question.getAnswers().clear();
+            question.getAnswers().addAll(updatedAnswers);
+            Question updatedQuestion = questionRepo.save(question);
+            return new QuestionDto(updatedQuestion);
         }).orElse(null);
     }
 

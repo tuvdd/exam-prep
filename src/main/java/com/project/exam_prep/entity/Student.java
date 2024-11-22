@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -28,16 +29,11 @@ public class Student {
     private User user;
 
     @ManyToMany(mappedBy = "students")
-    private Set<Class> classes;
+    private Set<Class> classes = new HashSet<>();
 
-    @ManyToMany
-    @JoinTable(
-            name = "student_quiz",
-            joinColumns = @JoinColumn(name = "student_id"),
-            inverseJoinColumns = @JoinColumn(name = "quiz_id")
-    )
-    private Set<Quiz> quizzes;
+    @ManyToMany(mappedBy = "students", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.PERSIST})
+    private Set<Quiz> quizzes = new HashSet<>();
 
     @OneToMany(mappedBy = "student")
-    private Set<Result> results;
+    private Set<Result> results = new HashSet<>();
 }

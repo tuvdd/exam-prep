@@ -12,10 +12,10 @@ import java.util.Optional;
 @Repository
 public interface QuestionSetRepo extends JpaRepository<QuestionSet, Integer> {
     @Query("select new com.project.exam_prep.dto.QuestionSetDto(entity) from QuestionSet as entity")
-    List<QuestionSet> getAllQuestionSet();
+    List<QuestionSetDto> getAllQuestionSet();
     @Query("select new com.project.exam_prep.dto.QuestionSetDto(entity) from QuestionSet entity where entity.teacher.id = ?1")
-    List<QuestionSet> getAllQuestionSetByTeacherId(Integer teacherId);
+    List<QuestionSetDto> getAllQuestionSetByTeacherId(Integer teacherId);
 
-    @Query("select new com.project.exam_prep.dto.QuestionSetDto(entity) from QuestionSet entity where entity.id = ?1")
-    Optional<QuestionSet> getQuestionSetById(Integer id);
+//    @Query("select new com.project.exam_prep.dto.QuestionSetDto(entity) from QuestionSet entity where entity.id = ?1")
+//    Optional<QuestionSetDto> getQuestionSetById(Integer id);
 }

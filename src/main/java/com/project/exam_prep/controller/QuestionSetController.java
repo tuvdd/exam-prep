@@ -1,16 +1,16 @@
 package com.project.exam_prep.controller;
 
 import com.project.exam_prep.dto.QuestionSetDto;
-import com.project.exam_prep.service.QuestionService;
 import com.project.exam_prep.service.QuestionSetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/question-sets")
+@RequestMapping("/api/question-set")
 public class QuestionSetController {
 
     @Autowired
@@ -23,6 +23,15 @@ public class QuestionSetController {
         } else {
             return ResponseEntity.badRequest().body("Failed to add question set");
         }
+    }
+
+    @GetMapping("/{questionSetId}")
+    public ResponseEntity<?> getQuestionSetById(@PathVariable Integer questionSetId) {
+        Optional<QuestionSetDto> questionSetDto = questionSetService.getQuestionSetById(questionSetId);
+        if (questionSetDto.isPresent()) {
+            return ResponseEntity.ok().body(questionSetDto);
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @GetMapping

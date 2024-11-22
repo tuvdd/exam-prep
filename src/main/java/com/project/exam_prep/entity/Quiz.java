@@ -37,13 +37,18 @@ public class Quiz {
     @Column(nullable = false)
     private String mode;
 
-    @ManyToMany(mappedBy = "quizzes")
-    private Set<Student> students;
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinTable(
+            name = "student_quiz",
+            joinColumns = @JoinColumn(name = "quiz_id"),
+            inverseJoinColumns = @JoinColumn(name = "student_id")
+    )
+    private Set<Student> students = new HashSet<>();
 
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Result> results;
+    private Set<Result> results = new HashSet<>();
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "question_set_id")
     private QuestionSet questionSet;
 
