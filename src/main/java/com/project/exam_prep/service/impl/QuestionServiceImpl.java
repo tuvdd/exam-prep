@@ -4,6 +4,7 @@ import com.project.exam_prep.dto.QuestionDto;
 import com.project.exam_prep.entity.Answer;
 import com.project.exam_prep.entity.Question;
 import com.project.exam_prep.entity.QuestionImage;
+import com.project.exam_prep.mapper.QuestionMapper;
 import com.project.exam_prep.repo.QuestionRepo;
 import com.project.exam_prep.repo.TeacherRepo;
 import com.project.exam_prep.service.QuestionService;
@@ -17,17 +18,16 @@ import java.util.stream.Collectors;
 
 @Service
 public class QuestionServiceImpl implements QuestionService {
-
     @Autowired
     private QuestionRepo questionRepo;
-
     @Autowired
     private TeacherRepo teacherRepo;
+    @Autowired
+    private QuestionMapper questionMapper;
 
     @Override
     public boolean addQuestion(QuestionDto questionDto) {
-        QuestionDto.setRepo(teacherRepo);
-        Question newQuestion = QuestionDto.convert(questionDto);
+        Question newQuestion = questionMapper.convertToEntity(questionDto);
         newQuestion.setQuestionSets(null);
         questionRepo.save(newQuestion);
         return true;

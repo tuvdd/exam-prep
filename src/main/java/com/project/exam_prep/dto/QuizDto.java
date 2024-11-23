@@ -31,17 +31,6 @@ public class QuizDto {
     private Integer questionSetId;
     private Integer teacherId;
 
-    private static StudentRepo studentRepo;
-    private static TeacherRepo teacherRepo;
-    private static QuestionSetRepo questionSetRepo;
-
-    // Inject StudentRepo vào QuizConverter
-    public static void setRepo(StudentRepo studentRepo, TeacherRepo teacherRepo, QuestionSetRepo questionSetRepo) {
-        QuizDto.studentRepo = studentRepo;
-        QuizDto.teacherRepo = teacherRepo;
-        QuizDto.questionSetRepo = questionSetRepo;
-    }
-
     public QuizDto (Quiz quiz) {
         this.id = quiz.getId();
         this.title = quiz.getTitle();
@@ -72,30 +61,5 @@ public class QuizDto {
             studentIds.add(student.getId());
         }
         return studentIds;
-    }
-
-    public static Quiz convert(QuizDto quizDto) {
-        Quiz quiz = new Quiz();
-        quiz.setId(quizDto.getId());
-        quiz.setTitle(quizDto.getTitle());
-        quiz.setStartTime(quizDto.getStartTime());
-        quiz.setEndTime(quizDto.getEndTime());
-        quiz.setType(quizDto.getType());
-        quiz.setMode(quizDto.getMode());
-
-        // Lấy thông tin học sinh từ StudentRepo dựa trên studentIds
-        Set<Student> students = quizDto.getStudentIds().stream()
-                .map(studentId -> studentRepo.findById(studentId).orElse(null))
-                .filter(Objects::nonNull)
-                .collect(Collectors.toSet());
-        quiz.setStudents(students);
-
-        Set<Result> results = quizDto.getResults().stream()
-                .map(ResultDto::convert).collect(Collectors.toSet());
-        quiz.setResults(results);
-
-        quiz.setTeacher(teacherRepo.findById(quizDto.getTeacherId()).orElse(null));
-        quiz.setQuestionSet(questionSetRepo.findById(quizDto.getQuestionSetId()).orElse(null));
-        return quiz;
     }
 }

@@ -2,6 +2,7 @@ package com.project.exam_prep.service.impl;
 
 import com.project.exam_prep.dto.ReportDto;
 import com.project.exam_prep.entity.Report;
+import com.project.exam_prep.mapper.ReportMapper;
 import com.project.exam_prep.repo.ReportRepo;
 import com.project.exam_prep.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,8 @@ public class ReportServiceImpl implements ReportService {
 
     @Autowired
     private ReportRepo reportRepo;
+    @Autowired
+    private ReportMapper reportMapper;
 
     @Override
     public List<ReportDto> getAllReport() {
@@ -40,14 +43,14 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     public boolean addReport(ReportDto reportDto) {
-        reportRepo.save(ReportDto.convert(reportDto));
+        reportRepo.save(reportMapper.convertToEntity(reportDto));
         return true;
     }
 
     @Override
     public ReportDto updateReport(ReportDto reportDto) {
         if(!reportRepo.existsById(reportDto.getId())) return null;
-        reportRepo.save(ReportDto.convert(reportDto));
+        reportRepo.save(reportMapper.convertToEntity(reportDto));
         return new ReportDto(reportRepo.findById(reportDto.getId()).get());
     }
 

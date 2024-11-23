@@ -26,14 +26,7 @@ public class QuestionDto {
     private List<AnswerDto> answers = new ArrayList<>();
     private Integer teacherId;
 
-    private static TeacherRepo teacherRepo;
-
-    public static void setRepo(TeacherRepo teacherRepo){
-        QuestionDto.teacherRepo = teacherRepo;
-    }
-
     // Constructor
-
     public QuestionDto(Question question) {
         if (question != null) {
             this.id = question.getId();
@@ -71,30 +64,5 @@ public class QuestionDto {
             result.add(new AnswerDto(answer));
         }
         return result;
-    }
-
-    public static Question convert(QuestionDto questionDto) {
-        Question question = new Question();
-        question.setId(questionDto.getId());
-        question.setQuestionText(questionDto.getQuestionText());
-        question.setQuestionType(questionDto.getQuestionType());
-
-        List<QuestionImage> questionImages = new ArrayList<>();
-        for(QuestionImageDto questionImageDto : questionDto.getQuestionImages()) {
-            QuestionImage questionImage = new QuestionImage(questionImageDto.getId(), questionImageDto.getName(),
-                    questionImageDto.getImageUrl(), question);
-            questionImages.add(questionImage);
-        }
-        question.setQuestionImages(questionImages);
-
-        List<Answer> answers = new ArrayList<>();
-        for(AnswerDto answerDto : questionDto.getAnswers()) {
-            Answer answer = new Answer(answerDto.getId(), answerDto.getAnswerText(),
-                    answerDto.isCorrect(), question);
-            answers.add(answer);
-        }
-        question.setAnswers(answers);
-        question.setTeacher(teacherRepo.findById(questionDto.getTeacherId()).orElse(null));
-        return question;
     }
 }

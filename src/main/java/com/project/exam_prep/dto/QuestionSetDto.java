@@ -24,12 +24,6 @@ public class QuestionSetDto {
     private Integer teacherId;
     private Set<QuestionDto> questions = new HashSet<>();
 
-    private static TeacherRepo teacherRepo;
-
-    public static void setRepo(TeacherRepo teacherRepo){
-        QuestionSetDto.teacherRepo = teacherRepo;
-    }
-
     public QuestionSetDto(QuestionSet questionSet) {
         if(questionSet != null) {
             this.id = questionSet.getId();
@@ -49,12 +43,4 @@ public class QuestionSetDto {
         return result;
     }
 
-    public static QuestionSet convert(QuestionSetDto questionSetDto) {
-        return new QuestionSet(
-                questionSetDto.getId(),
-                questionSetDto.getTitle(),
-                questionSetDto.getSubject(),
-                teacherRepo.findById(questionSetDto.getTeacherId()).orElse(null),
-                questionSetDto.getQuestions().stream().map(QuestionDto::convert).collect(Collectors.toSet()));
-    }
 }

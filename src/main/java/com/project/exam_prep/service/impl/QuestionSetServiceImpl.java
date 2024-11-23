@@ -4,6 +4,7 @@ import com.project.exam_prep.dto.QuestionDto;
 import com.project.exam_prep.dto.QuestionSetDto;
 import com.project.exam_prep.entity.Question;
 import com.project.exam_prep.entity.QuestionSet;
+import com.project.exam_prep.mapper.QuestionMapper;
 import com.project.exam_prep.repo.QuestionRepo;
 import com.project.exam_prep.repo.QuestionSetRepo;
 import com.project.exam_prep.repo.QuizRepo;
@@ -26,6 +27,9 @@ public class QuestionSetServiceImpl implements QuestionSetService {
     private TeacherRepo teacherRepo;
     @Autowired
     private QuizRepo quizRepo;
+    @Autowired
+    private QuestionMapper questionMapper;
+
     @Override
     public boolean addQuestionSet(QuestionSetDto questionSetDto) {
         QuestionSet newQuestionSet = new QuestionSet();
@@ -35,7 +39,6 @@ public class QuestionSetServiceImpl implements QuestionSetService {
         newQuestionSet.setTeacher(teacherRepo.getTeacherById(questionSetDto.getTeacherId()));
         newQuestionSet.setQuestions(new HashSet<>());
         for(QuestionDto questionDto: questionSetDto.getQuestions()) {
-            QuestionDto.setRepo(teacherRepo);
             questionDto.setTeacherId(questionSetDto.getTeacherId());
             if (questionDto.getId() != null) {
                 questionRepo.findById(questionDto.getId()).ifPresent(question -> {
@@ -43,7 +46,7 @@ public class QuestionSetServiceImpl implements QuestionSetService {
                     question.getQuestionSets().add(newQuestionSet);
                 });
             } else {
-                newQuestionSet.getQuestions().add(QuestionDto.convert(questionDto));
+                newQuestionSet.getQuestions().add(questionMapper.convertToEntity(questionDto));
             }
         }
 
@@ -53,7 +56,6 @@ public class QuestionSetServiceImpl implements QuestionSetService {
 
     @Override
     public Optional<QuestionSetDto> getQuestionSetById(Integer id) {
-        QuestionSetDto.setRepo(teacherRepo);
         return questionSetRepo.findById(id).map(QuestionSetDto::new);
     }
 
@@ -69,7 +71,6 @@ public class QuestionSetServiceImpl implements QuestionSetService {
 
     @Override
     public QuestionSetDto updateQuestionSet(QuestionSetDto questionSetDto) {
-        QuestionDto.setRepo(teacherRepo);
         Optional<QuestionSet> existingQuestionSet = questionSetRepo
                 .findById(questionSetDto.getId());
         return existingQuestionSet.map(questionSet -> {
@@ -85,7 +86,7 @@ public class QuestionSetServiceImpl implements QuestionSetService {
                         });
                         return existingQuestion.orElse(null);
                     } else {
-                        Question newQuestion = QuestionDto.convert(questionDto);
+                        Question newQuestion = questionMapper.convertToEntity(questionDto);
                         newQuestion.setQuestionSets(new HashSet<>());
                         newQuestion.getQuestionSets().add(questionSet);
                         return newQuestion;
