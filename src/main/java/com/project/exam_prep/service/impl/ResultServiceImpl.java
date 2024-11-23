@@ -2,6 +2,7 @@ package com.project.exam_prep.service.impl;
 
 import com.project.exam_prep.dto.ResultDto;
 import com.project.exam_prep.entity.Result;
+import com.project.exam_prep.mapper.ResultMappper;
 import com.project.exam_prep.repo.ResultRepo;
 import com.project.exam_prep.service.ResultService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,9 @@ public class ResultServiceImpl implements ResultService {
 
     @Autowired
     private ResultRepo resultRepo;
+    @Autowired
+    private ResultMappper resultMappper;
+
     @Override
     public List<ResultDto> getResultByQuiz(int quizId) {
         List<ResultDto> resultDtoList = new ArrayList<>();
@@ -33,7 +37,7 @@ public class ResultServiceImpl implements ResultService {
 
     @Override
     public boolean saveResult(ResultDto resultDto) {
-        Result result = ResultDto.convert(resultDto);
+        Result result = resultMappper.convertToEntity(resultDto);
         resultRepo.save(result);
         return true;
     }
@@ -41,7 +45,7 @@ public class ResultServiceImpl implements ResultService {
     @Override
     public ResultDto updateResult(ResultDto resultDto) {
         if(!resultRepo.existsById(resultDto.getId())) return null;
-        Result result = ResultDto.convert(resultDto);
+        Result result = resultMappper.convertToEntity(resultDto);
         resultRepo.save(result);
         return new ResultDto(resultRepo.findById(resultDto.getId()).get());
     }

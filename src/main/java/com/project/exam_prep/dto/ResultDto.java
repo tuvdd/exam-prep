@@ -20,13 +20,6 @@ public class ResultDto {
 //    private Integer studentId;
     private Integer quizId;
     private StudentDto studentDto;
-    private static StudentRepo studentRepo;
-    private static QuizRepo quizRepo;
-
-    public static void setRepo(StudentRepo studentRepo, QuizRepo quizRepo) {
-        ResultDto.studentRepo = studentRepo;
-        ResultDto.quizRepo = quizRepo;
-    }
 
     public ResultDto (Result result) {
         this.id = result.getId();
@@ -36,18 +29,5 @@ public class ResultDto {
 //        this.studentId = result.getStudent().getId();
         this.quizId = result.getQuiz().getId();
         this.studentDto = new StudentDto(result.getStudent());
-    }
-
-    public static Result convert(ResultDto resultDto) {
-
-        return new Result(
-                resultDto.getId(),
-                resultDto.getScore(),
-                resultDto.getStartTime(),
-                resultDto.getEndTime(),
-                StudentDto.covert(resultDto.getStudentDto()),
-//                studentRepo.findById(resultDto.getStudentId()).orElse(null),
-                quizRepo.findById(resultDto.getQuizId()).orElse(null));
-
     }
 }

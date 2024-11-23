@@ -22,14 +22,4 @@ public class ReportDto {
         this.reason = report.getReason();
         this.isProcessed = report.getIsProcessed();
     }
-
-    public static Report convert(ReportDto reportDto) {
-        return new Report(
-                reportDto.getId(),
-                reportDto.getReporterName(),
-                reportDto.getReporterCode(),
-                reportDto.getReason(),
-                reportDto.getIsProcessed()
-        );
-    }
 }

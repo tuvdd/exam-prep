@@ -7,6 +7,8 @@ import com.project.exam_prep.entity.QuestionSet;
 import com.project.exam_prep.entity.Quiz;
 import com.project.exam_prep.entity.Result;
 import com.project.exam_prep.entity.Student;
+import com.project.exam_prep.mapper.QuizMapper;
+import com.project.exam_prep.mapper.ResultMappper;
 import com.project.exam_prep.repo.QuestionSetRepo;
 import com.project.exam_prep.repo.QuizRepo;
 import com.project.exam_prep.repo.StudentRepo;
@@ -22,20 +24,22 @@ import java.util.stream.Collectors;
 @Service
 public class QuizServiceImpl implements QuizService {
     @Autowired
-    QuizRepo quizRepo;
+    private QuizRepo quizRepo;
     @Autowired
-    StudentRepo studentRepo;
+    private StudentRepo studentRepo;
     @Autowired
-    TeacherRepo teacherRepo;
+    private TeacherRepo teacherRepo;
     @Autowired
-    QuestionSetRepo questionSetRepo;
+    private QuestionSetRepo questionSetRepo;
+    @Autowired
+    private QuizMapper quizMapper;
+    @Autowired
+    private ResultMappper resultMappper;
 
 
     @Override
     public boolean addQuiz(QuizDto quizDto) {
-        QuizDto.setRepo(studentRepo, teacherRepo, questionSetRepo);
-        ResultDto.setRepo(studentRepo, quizRepo);
-        Quiz newQuiz = QuizDto.convert(quizDto);
+        Quiz newQuiz = quizMapper.convertToEntity(quizDto);
         for (Student student : newQuiz.getStudents()) {
             student.getQuizzes().add(newQuiz);
         }
@@ -70,7 +74,6 @@ public class QuizServiceImpl implements QuizService {
 
     @Override
     public QuizDto updateQuiz(QuizDto quizDto) {
-        ResultDto.setRepo(studentRepo, quizRepo);
         Optional<Quiz> existingQuiz = quizRepo.findById(quizDto.getId());
         return existingQuiz.map(quiz -> {
             quiz.setTitle(quizDto.getTitle());
@@ -86,7 +89,7 @@ public class QuizServiceImpl implements QuizService {
                                     .orElse(null)).collect(Collectors.toSet()));
             quiz.setQuestionSet(questionSetRepo.findById(quizDto.getQuestionSetId()).orElse(null));
             quiz.getResults().clear();
-            quiz.getResults().addAll(quizDto.getResults().stream().map(ResultDto::convert).collect(Collectors.toSet()));
+            quiz.getResults().addAll(quizDto.getResults().stream().map(resultMappper::convertToEntity).collect(Collectors.toSet()));
             Quiz updatedQuiz = quizRepo.save(quiz);
             return new QuizDto(updatedQuiz);
         }).orElse(null);

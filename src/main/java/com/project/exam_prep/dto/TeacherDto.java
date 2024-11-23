@@ -54,33 +54,4 @@ public class TeacherDto {
         }
         return result;
     }
-
-    public static Teacher covert(TeacherDto teacherDto) {
-        User user = new User(
-                teacherDto.getUserDto().getId(),
-                teacherDto.getUserDto().getUsername(),
-                teacherDto.getUserDto().getPassword(),
-                teacherDto.getUserDto().getFirstName(),
-                teacherDto.getUserDto().getLastName(),
-                teacherDto.getUserDto().getProfilePicture(),
-                teacherDto.getUserDto().getEmail(),
-                teacherDto.getUserDto().getPhoneNumber(),
-                teacherDto.getUserDto().getAddress(),
-                teacherDto.getUserDto().getRole(),
-                teacherDto.getUserDto().is_active()
-        );
-
-        Teacher teacher;
-        teacher = new Teacher(
-                teacherDto.getId(),
-                teacherDto.getTeacherCode(),
-                teacherDto.getDepartment(),
-                teacherDto.getPosition(),
-                teacherDto.getExpertiseArea(),
-                user, null, null
-        );
-
-        return teacher;
-    }
-
 }
