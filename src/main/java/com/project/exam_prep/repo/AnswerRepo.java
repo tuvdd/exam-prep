@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public interface AnswerRepo extends JpaRepository<Answer, Integer> {
@@ -14,7 +15,8 @@ public interface AnswerRepo extends JpaRepository<Answer, Integer> {
     @Query("select new com.project.exam_prep.dto.AnswerDto(entity) from Answer entity where entity.question.id = ?1")
     List<AnswerDto> findAnswersByQuestionId(Integer questionId);
 
-    @Query("select new com.project.exam_prep.dto.AnswerDto(entity) from Answer entity " +
+    @Query("SELECT entity.answerText FROM Answer entity " +
             "WHERE entity.question.id = ?1 AND entity.isCorrect = true")
-    List<Answer> findCorrectAnswersByQuestionId(Integer questionId);
+    Set<String> findCorrectAnswersByQuestionId(Integer questionId);
+
 }
