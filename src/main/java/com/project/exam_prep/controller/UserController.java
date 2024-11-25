@@ -25,7 +25,7 @@ public class UserController {
     @Autowired
     private AdminService adminService;
 
-    @PostMapping()
+    @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDto loginDTO) {
         UserDto userDto = userService.login(loginDTO.getUsername(), loginDTO.getPassword());
         System.out.println(userDto);
@@ -35,14 +35,14 @@ public class UserController {
         return ResponseEntity.ok(adminService.updateLastLogin(userDto.getId()));
     }
 
-    @GetMapping("/ban/{userId}")
+    @GetMapping("/admin/ban/{userId}")
     public ResponseEntity<?> banUser(@PathVariable int userId) {
         boolean result = userService.banUser(userId);
         if(result) return new ResponseEntity<>(HttpStatus.OK);
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("/unban/{userId}")
+    @GetMapping("/admin/unban/{userId}")
     public ResponseEntity<?> unBanUser(@PathVariable int userId) {
         boolean result = userService.unBanUser(userId);
         if(result) return new ResponseEntity<>(HttpStatus.OK);

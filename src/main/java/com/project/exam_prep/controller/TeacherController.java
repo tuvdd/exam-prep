@@ -17,21 +17,21 @@ public class TeacherController {
     @Autowired
     private TeacherService teacherService;
 
-    @PostMapping("/save")
+    @PostMapping("/admin/save")
     public ResponseEntity<?> saveTeacher(@RequestBody TeacherDto teacherDto) {
         boolean result = teacherService.addTeacher(teacherDto);
         if (result) return new ResponseEntity<>(HttpStatus.CREATED);
         else return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @PostMapping("/save-from-excel")
+    @PostMapping("/admin/save-from-excel")
     public ResponseEntity<?> saveTeacher(@RequestBody List<TeacherDto> teacherDtos) {
         boolean result = teacherService.addTeachers(teacherDtos);
         if (result) return new ResponseEntity<>(HttpStatus.CREATED);
         else return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @GetMapping
+    @GetMapping("/admin/all")
     public ResponseEntity<?> getAllTeacher() {
         List<TeacherDto> teacherDtos = teacherService.getAllTeacher();
         return ResponseEntity.ok(teacherDtos);
@@ -44,7 +44,7 @@ public class TeacherController {
         return ResponseEntity.ok(teacherDto);
     }
 
-    @PutMapping("/update")
+    @PutMapping("/admin/update")
     public ResponseEntity<TeacherDto> updateTeacher(@RequestBody TeacherDto teacherDto) {
         TeacherDto teacherDtoUpdate = teacherService.updateTeacher(teacherDto);
         if(teacherDtoUpdate == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

@@ -34,7 +34,7 @@ public class QuestionSetController {
         return ResponseEntity.notFound().build();
     }
 
-    @GetMapping
+    @GetMapping("/admin/all")
     public ResponseEntity<List<QuestionSetDto>> getAllQuestionSets() {
         List<QuestionSetDto> questionSets = questionSetService.getAllQuestionSet();
         return ResponseEntity.ok(questionSets);
@@ -46,7 +46,7 @@ public class QuestionSetController {
         return ResponseEntity.ok(questionSets);
     }
 
-    @PutMapping
+    @PutMapping("/update")
     public ResponseEntity<?> updateQuestionSet(@RequestBody QuestionSetDto questionSetDto) {
         QuestionSetDto updatedQuestionSet = questionSetService.updateQuestionSet(questionSetDto);
         if (updatedQuestionSet != null) {
