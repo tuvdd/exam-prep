@@ -35,7 +35,7 @@ public class QuestionController {
         else return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @GetMapping
+    @GetMapping("/admin/all")
     public ResponseEntity<?> getAllQuestions() {
         List<QuestionDto> questionDtos = questionService.getAllQuestions();
         return ResponseEntity.ok(questionDtos);

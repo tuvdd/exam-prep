@@ -13,4 +13,5 @@ public interface UserService {
     boolean unBanUser(Integer userId);
     User updateUser (UserDto userDto);
     UserDto login(String username, String password);
+    UserDto getUserInfo(String username);
 }

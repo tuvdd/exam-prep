@@ -120,4 +120,10 @@ public class UserServiceImpl implements UserService {
         return new UserDto(user);
     }
 
+    @Override
+    public UserDto getUserInfo(String username) {
+        return new UserDto(userRepo.getUserByUsername(username));
+    }
+
+
 }

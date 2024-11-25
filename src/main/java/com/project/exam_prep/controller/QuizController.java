@@ -16,7 +16,7 @@ public class QuizController {
     @Autowired
     private QuizService quizService;
 
-    @PostMapping("/save")
+    @PostMapping("/teacher/save")
     public ResponseEntity<String> addQuiz(@RequestBody QuizDto quizDto) {
         boolean result = quizService.addQuiz(quizDto);
         if (result) {
@@ -32,7 +32,7 @@ public class QuizController {
         return quiz.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @GetMapping()
+    @GetMapping("/admin/all")
     public List<QuizDto> getAllQuizzes() {
         return quizService.getAllQuizzes();
     }
@@ -47,7 +47,7 @@ public class QuizController {
         return quizService.getAllQuizzesByTeacherId(teacherId);
     }
 
-    @PutMapping("/update")
+    @PutMapping("/teacher/update")
     public ResponseEntity<QuizDto> updateQuiz(@RequestBody QuizDto quizDto) {
         QuizDto updatedQuiz = quizService.updateQuiz(quizDto);
         if (updatedQuiz != null) {
@@ -57,7 +57,7 @@ public class QuizController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/teacher/{id}")
     public ResponseEntity<String> deleteQuizById(@PathVariable Integer id) {
         boolean result = quizService.deleteQuizById(id);
         if (result) {

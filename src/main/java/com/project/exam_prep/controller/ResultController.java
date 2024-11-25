@@ -26,13 +26,13 @@ public class ResultController {
         return  new ResponseEntity<>("Failed to add Result", HttpStatus.BAD_REQUEST);
     }
 
-    @GetMapping("/quiz/{quizId}")
+    @GetMapping("/teacher/quiz/{quizId}")
     public  ResponseEntity<?> getResultsByQuiz(@PathVariable Integer quizId) {
         List<ResultDto> resultDtoList = resultService.getResultByQuiz(quizId);
         return ResponseEntity.ok(resultDtoList);
     }
 
-    @GetMapping()
+    @GetMapping("student-quiz")
     public ResponseEntity<?> getResultByQuizAndStudent(@RequestBody Integer quizId,
                                                        @RequestBody Integer studentId) {
         ResultDto resultDto = resultService.getResultByQuizAndStudent(quizId, studentId);
@@ -46,7 +46,7 @@ public class ResultController {
         return ResponseEntity.ok(result);
     }
 
-    @DeleteMapping("/{reultId}")
+    @DeleteMapping("/admin/{resultId}")
     public ResponseEntity<?> deleteResult(@PathVariable Integer resultId) {
         boolean check = resultService.deleteResult(resultId);
         if(!check) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
