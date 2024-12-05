@@ -32,26 +32,15 @@ public class SecurityConfig {
         http.authorizeHttpRequests((request) -> request
 //                trong db luu role la ROLE_STUDENT (STUDENT la loi)
 
-                .requestMatchers("/api/user/admin/**",
-                        "/api/admin/**",
-                        "/api/question/admin/**",
-                        "/api/question-set/admin/**",
-                        "/api/quiz/admin/**",
-                        "/api/student/admin/**",
-                        "/api/teacher/admin/**",
-                        "/api/result/admin/**")
-                        .hasRole("ADMIN")
-                .requestMatchers("/api/question/**",
-                        "/api/question-set/**",
-                        "/api/quiz/teacher/**",
-                        "/api/result/teacher/**",
-                        "/api/teacher/**")
-                        .hasRole("TEACHER")
-                .requestMatchers("/api/quiz/student/**", "api/student/**").hasRole("STUDENT")
-                .requestMatchers("/api/quiz/**").hasAnyRole("STUDENT", "TEACHER")
-                .requestMatchers("/api/teacher/**").hasAnyRole("ADMIN", "TEACHER")
-                .requestMatchers("/api/student/**").hasAnyRole("ADMIN", "STUDENT")
-                .requestMatchers("/api/authenticate","/api/user/login").permitAll()
+                .requestMatchers("/api/admin/**",
+                        "/api/export/admin/**")
+                                .hasRole("ADMIN")
+                .requestMatchers("/api/teacher/**")
+                                .hasRole("TEACHER")
+                .requestMatchers("api/student/**")
+                                .hasRole("STUDENT")
+                .requestMatchers("/api/authenticate","/api/authenticate/**")
+                                .permitAll()
                 .anyRequest().authenticated()
         )
                 .sessionManagement(sesstion -> sesstion.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

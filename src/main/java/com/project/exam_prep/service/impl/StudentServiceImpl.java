@@ -36,8 +36,13 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public StudentDto getStudentById(Integer id) {
-        return new StudentDto(studentRepo.getStudentByUserId(id));
+    public StudentDto getStudentByUserId(Integer userId) {
+        return new StudentDto(studentRepo.getStudentByUserId(userId));
+    }
+
+    @Override
+    public StudentDto getStudentById(Integer studentId) {
+        return new StudentDto(studentRepo.findById(studentId).orElse(null));
     }
 
     @Override

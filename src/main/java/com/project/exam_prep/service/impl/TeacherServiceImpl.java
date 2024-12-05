@@ -1,7 +1,6 @@
 package com.project.exam_prep.service.impl;
 
 import com.project.exam_prep.dto.TeacherDto;
-import com.project.exam_prep.dto.UserDto;
 import com.project.exam_prep.entity.Teacher;
 import com.project.exam_prep.entity.User;
 import com.project.exam_prep.repo.TeacherRepo;
@@ -35,8 +34,13 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public TeacherDto getTeacherById(Integer id) {
-        return new TeacherDto(teacherRepo.getTeacherByUserId(id));
+    public TeacherDto getTeacherByUserId(Integer userId) {
+        return new TeacherDto(teacherRepo.getTeacherByUserId(userId));
+    }
+
+    @Override
+    public TeacherDto getTeacherById(Integer teacherId) {
+        return new TeacherDto(teacherRepo.getTeacherById(teacherId));
     }
 
     @Override

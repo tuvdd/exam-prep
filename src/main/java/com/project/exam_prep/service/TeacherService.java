@@ -6,7 +6,8 @@ import java.util.List;
 
 public interface TeacherService {
     List<TeacherDto> getAllTeacher();
-    TeacherDto getTeacherById(Integer id);
+    TeacherDto getTeacherByUserId(Integer userId);
+    TeacherDto getTeacherById(Integer teacherId);
     TeacherDto updateTeacher(TeacherDto teacherDto);
 
     boolean addTeacher(TeacherDto teacherDto);
