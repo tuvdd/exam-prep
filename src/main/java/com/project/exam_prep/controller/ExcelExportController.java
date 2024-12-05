@@ -10,13 +10,13 @@ public class ExcelExportController {
     @Autowired
     private ExcelExportService excelExportService;
 
-    @GetMapping("/teacher")
+    @GetMapping("/admin/teacher-list")
     public void exportTeachersToExcel(@RequestParam("filePath") String filepath) {
         if (filepath.isEmpty()) filepath = "Teachers.xlsx";
         excelExportService.exportTeachersToExcel(filepath);
     }
 
-    @GetMapping("/student")
+    @GetMapping("/admin/student-list")
     public void exportStudentsToExcel(@RequestParam("filePath") String filepath) {
         if (filepath.isEmpty()) filepath = "Student.xlsx";
         excelExportService.exportStudentsToExcel(filepath);
