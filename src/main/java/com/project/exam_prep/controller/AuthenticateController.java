@@ -15,12 +15,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api/authenticate")
 public class AuthenticateController {
     @Autowired
@@ -46,10 +44,11 @@ public class AuthenticateController {
                     loginDto.getPassword()));
             final UserDetails userDetails = customUserDetailsService.loadUserByUsername(loginDto.getUsername());
             String jwt = jwtUtil.generateToken(userDetails.getUsername());
-            return ResponseEntity.ok(new AuthenticationRespone(jwt, null));
+            String role = userDetails.getAuthorities().iterator().next().getAuthority();
+            return ResponseEntity.ok(new AuthenticationRespone(jwt, role,null));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(new AuthenticationRespone(null, "Login Failed! " + e.getMessage()));
+                    .body(new AuthenticationRespone(null, null,"Login Failed! " + e.getMessage()));
         }
     }
 
@@ -62,4 +61,5 @@ public class AuthenticateController {
         if(userDto.getRole().equals("ROLE_TEACHER")) return ResponseEntity.ok(teacherService.getTeacherByUserId(userDto.getId()));
         return ResponseEntity.ok(adminService.updateLastLogin(userDto.getId()));
     }
+
 }

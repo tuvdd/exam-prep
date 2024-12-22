@@ -1,11 +1,12 @@
 package com.project.exam_prep.service;
 
+import com.project.exam_prep.dto.DetailTeacherDto;
 import com.project.exam_prep.dto.TeacherDto;
 
 import java.util.List;
 
 public interface TeacherService {
-    List<TeacherDto> getAllTeacher();
+    List<DetailTeacherDto> getAllTeacher();
     TeacherDto getTeacherByUserId(Integer userId);
     TeacherDto getTeacherById(Integer teacherId);
     TeacherDto updateTeacher(TeacherDto teacherDto);

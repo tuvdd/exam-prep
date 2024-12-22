@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("api/admin")
 public class AdminController {
     @Autowired
@@ -22,6 +22,8 @@ public class AdminController {
     @Autowired
     private TeacherService teacherService;
     @Autowired
+    private ClassService classService;
+    @Autowired
     private QuestionService questionService;
     @Autowired
     private QuestionSetService questionSetService;
@@ -31,14 +33,14 @@ public class AdminController {
     private ResultService resultService;
 
     //    ===============================USER===============================
-    @GetMapping("/user/ban/{userId}")
+    @PostMapping("/user/ban/{userId}")
     public ResponseEntity<?> banUser(@PathVariable int userId) {
         boolean result = userService.banUser(userId);
         if(result) return new ResponseEntity<>(HttpStatus.OK);
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("/user/unban/{userId}")
+    @PostMapping("/user/unban/{userId}")
     public ResponseEntity<?> unBanUser(@PathVariable int userId) {
         boolean result = userService.unBanUser(userId);
         if(result) return new ResponseEntity<>(HttpStatus.OK);
@@ -77,7 +79,7 @@ public class AdminController {
 
     @GetMapping("/student/all")
     public ResponseEntity<?> getAllStudent() {
-        List<StudentDto> studentDtos = studentService.getAllStudent();
+        List<DetailStudentDto> studentDtos = studentService.getAllStudent();
         return ResponseEntity.ok(studentDtos);
     }
 
@@ -112,7 +114,7 @@ public class AdminController {
 
     @GetMapping("/teacher/all")
     public ResponseEntity<?> getAllTeacher() {
-        List<TeacherDto> teacherDtos = teacherService.getAllTeacher();
+        List<DetailTeacherDto> teacherDtos = teacherService.getAllTeacher();
         return ResponseEntity.ok(teacherDtos);
     }
 
@@ -121,6 +123,49 @@ public class AdminController {
         TeacherDto teacherDtoUpdate = teacherService.updateTeacher(teacherDto);
         if(teacherDtoUpdate == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         return ResponseEntity.ok(teacherDtoUpdate);
+    }
+
+    //    ===============================CLASS===============================
+
+    @PostMapping("/class/save")
+    public ResponseEntity<?> addClass(@RequestBody DetailClassDto detailClassDto) {
+        if (classService.addClass(detailClassDto)) {
+            return ResponseEntity.ok("Class added successfully.");
+        } else {
+            return ResponseEntity.badRequest().body("Failed to add class.");
+        }
+    }
+
+    @PutMapping("/class/update")
+    public ResponseEntity<?> updateClass(@RequestBody DetailClassDto detailClassDto) {
+        DetailClassDto updatedClass = classService.updateClass(detailClassDto);
+        if (updatedClass != null) {
+            return ResponseEntity.ok(updatedClass);
+        } else {
+            return ResponseEntity.badRequest().body("Class not found or update failed.");
+        }
+    }
+
+    @DeleteMapping("/class/{classId}")
+    public ResponseEntity<?> deleteClass(@PathVariable Integer classId) {
+        if (classService.deleteClassById(classId)) {
+            return ResponseEntity.ok("Class deleted successfully.");
+        } else {
+            return ResponseEntity.badRequest().body("Failed to delete class.");
+        }
+    }
+
+    @GetMapping("/class/{classId}")
+    public ResponseEntity<?> getClassById(@PathVariable int classId) {
+        DetailClassDto classDto = classService.getClassById(classId);
+        if(classDto.getId() == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return ResponseEntity.ok(classDto);
+    }
+
+    @GetMapping("/class/all")
+    public ResponseEntity<?> getAllClasses() {
+        List<DetailClassDto> classDtos = classService.getAllClasses();
+        return ResponseEntity.ok(classDtos);
     }
 
     //    ===============================QUESTION===============================
