@@ -2,6 +2,7 @@ package com.project.exam_prep.service.impl;
 
 import com.project.exam_prep.dto.QuestionDto;
 import com.project.exam_prep.dto.QuestionSetDto;
+import com.project.exam_prep.dto.SimpleQuestionSetDto;
 import com.project.exam_prep.entity.Question;
 import com.project.exam_prep.entity.QuestionSet;
 import com.project.exam_prep.mapper.QuestionMapper;
@@ -65,7 +66,7 @@ public class QuestionSetServiceImpl implements QuestionSetService {
     }
 
     @Override
-    public List<QuestionSetDto> getAllQuestionSetByTeacherId(Integer teacherId) {
+    public List<SimpleQuestionSetDto> getAllQuestionSetByTeacherId(Integer teacherId) {
         return questionSetRepo.getAllQuestionSetByTeacherId(teacherId) ;
     }
 

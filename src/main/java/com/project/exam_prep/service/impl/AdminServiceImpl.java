@@ -42,7 +42,7 @@ public class AdminServiceImpl implements AdminService {
                 adminDto.getUserDto().getEmail(),
                 adminDto.getUserDto().getPhoneNumber(),
                 adminDto.getUserDto().getAddress(),
-                adminDto.getUserDto().getRole(),
+                "ROLE_ADMIN",
                 true
         );
 

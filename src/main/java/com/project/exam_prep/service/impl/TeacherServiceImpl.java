@@ -1,5 +1,6 @@
 package com.project.exam_prep.service.impl;
 
+import com.project.exam_prep.dto.DetailTeacherDto;
 import com.project.exam_prep.dto.TeacherDto;
 import com.project.exam_prep.entity.Teacher;
 import com.project.exam_prep.entity.User;
@@ -24,11 +25,11 @@ public class TeacherServiceImpl implements TeacherService {
     @Autowired
     private UserRepo userRepo;
     @Override
-    public List<TeacherDto> getAllTeacher() {
-        List<TeacherDto> result = new ArrayList<>();
+    public List<DetailTeacherDto> getAllTeacher() {
+        List<DetailTeacherDto> result = new ArrayList<>();
         List<Teacher> teachers = teacherRepo.findAll();
         for(Teacher teacher: teachers) {
-            result.add(new TeacherDto(teacher));
+            result.add(new DetailTeacherDto(teacher));
         }
         return result;
     }
@@ -60,7 +61,7 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public boolean addTeacher(TeacherDto teacherDto) {
-        if (teacherDto.getUserDto().getUsername() == null || teacherDto.getUserDto().getPassword() == null) {
+        if (teacherDto == null || teacherDto.getUserDto() == null || teacherDto.getUserDto().getUsername() == null || teacherDto.getUserDto().getPassword() == null) {
             return false;
         }
         String encodePassword = encoder.encode(teacherDto.getUserDto().getPassword());
@@ -78,7 +79,7 @@ public class TeacherServiceImpl implements TeacherService {
                 teacherDto.getUserDto().getEmail(),
                 teacherDto.getUserDto().getPhoneNumber(),
                 teacherDto.getUserDto().getAddress(),
-                teacherDto.getUserDto().getRole(),
+                "ROLE_TEACHER",
                 true
         );
 

@@ -1,31 +1,58 @@
 package com.project.exam_prep.service.impl;
 
 import com.project.exam_prep.dto.ResultDto;
+import com.project.exam_prep.dto.StudentDto;
 import com.project.exam_prep.entity.Result;
 import com.project.exam_prep.mapper.ResultMappper;
 import com.project.exam_prep.repo.ResultRepo;
+import com.project.exam_prep.repo.StudentRepo;
+import com.project.exam_prep.service.QuizService;
 import com.project.exam_prep.service.ResultService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+
 @Service
 public class ResultServiceImpl implements ResultService {
 
     @Autowired
     private ResultRepo resultRepo;
     @Autowired
+    private QuizService quizService;
+    @Autowired
+    private StudentRepo studentRepo;
+    @Autowired
     private ResultMappper resultMappper;
 
     @Override
     public List<ResultDto> getResultByQuiz(int quizId) {
         List<ResultDto> resultDtoList = new ArrayList<>();
-
+        Set<Integer> studentIds = quizService.getQuizById(quizId).orElse(null).getStudentIds();
+//        System.out.println(studentIds.toString());
         List<Result> resultList = resultRepo.getResultsByQuizId(quizId);
+        List<Integer> testedStudentIds = new ArrayList<>();
         for(Result result: resultList) {
             resultDtoList.add(new ResultDto(result));
+            testedStudentIds.add(result.getStudent().getId());
         }
+        if (!studentIds.isEmpty()) {
+            for (Integer studentId : studentIds) {
+                if (!testedStudentIds.contains(studentId)) {
+                    resultDtoList.add(new ResultDto(
+                            null,
+                            0,
+                            null,
+                            null,
+                            quizId,
+                            new StudentDto(studentRepo.findById(studentId).orElse(null))));
+                }
+            }
+        }
+
+
 
         return resultDtoList;
     }
