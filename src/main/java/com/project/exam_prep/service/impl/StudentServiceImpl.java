@@ -58,6 +58,18 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    public StudentDto changePasseord(StudentDto studentDto) {
+        Student student = studentRepo.getStudentById(studentDto.getId());
+        User user = userService.changePassword(studentDto.getUserDto());
+        if(user == null) return null;
+        student.setStudentCode(studentDto.getStudentCode());
+        student.setUser(user);
+
+        studentRepo.save(student);
+        return new StudentDto(studentRepo.getStudentById(studentDto.getId()));
+    }
+
+    @Override
     public boolean addStudent(StudentDto studentDto) {
         if (studentDto.getUserDto().getUsername() == null || studentDto.getUserDto().getPassword() == null) {
             return false;

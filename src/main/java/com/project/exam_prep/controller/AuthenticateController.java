@@ -46,20 +46,35 @@ public class AuthenticateController {
                     loginDto.getPassword()));
             final UserDetails userDetails = customUserDetailsService.loadUserByUsername(loginDto.getUsername());
             String jwt = jwtUtil.generateToken(userDetails.getUsername());
-            return ResponseEntity.ok(new AuthenticationRespone(jwt, null));
+            return ResponseEntity.ok(new AuthenticationRespone(jwt, null, null));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(new AuthenticationRespone(null, "Login Failed! " + e.getMessage()));
+                    .body(new AuthenticationRespone(null, "Login Failed! " + e.getMessage(), null));
         }
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDto loginDTO) {
+        // Xác thực người dùng
         UserDto userDto = userService.login(loginDTO.getUsername(), loginDTO.getPassword());
-        System.out.println(userDto);
-        if(userDto == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        if(userDto.getRole().equals("ROLE_STUDENT")) return ResponseEntity.ok(studentService.getStudentByUserId(userDto.getId()));
-        if(userDto.getRole().equals("ROLE_TEACHER")) return ResponseEntity.ok(teacherService.getTeacherByUserId(userDto.getId()));
-        return ResponseEntity.ok(adminService.updateLastLogin(userDto.getId()));
+        if (userDto == null) {
+            // Nếu không tìm thấy người dùng, trả về lỗi 404
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        // Tạo token JWT
+        try {
+            final UserDetails userDetails = customUserDetailsService.loadUserByUsername(loginDTO.getUsername());
+            String jwt = jwtUtil.generateToken(userDetails.getUsername());
+
+            // Trả về thông tin người dùng và token
+            AuthenticationRespone response = new AuthenticationRespone(jwt,null, userDto);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            // Nếu có lỗi khi tạo token, trả về lỗi 500
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new AuthenticationRespone(null, "Error generating token: " + e.getMessage(), null));
+        }
     }
+
 }

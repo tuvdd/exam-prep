@@ -55,4 +55,13 @@ public class StudentAnswerServiceImpl implements StudentAnswerService {
         return (double) correct / total * 10;
     }
 
+    @Override
+    public boolean saveStudentAnswer(List<StudentAnswerDto> studentAnswerDtos) {
+        for (StudentAnswerDto studentAnswerDto : studentAnswerDtos) {
+            StudentAnswer studentAnswer = studentAnswerMapper.convertToEntity(studentAnswerDto);
+            studentAnswerRepo.save(studentAnswer);
+        }
+        return true;
+    }
+
 }
