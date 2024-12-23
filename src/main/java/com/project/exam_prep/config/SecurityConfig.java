@@ -10,6 +10,8 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,6 +28,7 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.Arrays;
+import java.util.List;
 // >>>>>>> main
 
 @Configuration
@@ -62,9 +65,9 @@ public class SecurityConfig {
         http.cors(cors -> cors.configurationSource(request -> {
             CorsConfiguration configuration = new CorsConfiguration();
             configuration.setAllowCredentials(false);
-            configuration.setAllowedOrigins(Arrays.asList("*"));
-            configuration.setAllowedMethods(Arrays.asList("*"));
-            configuration.setAllowedHeaders(Arrays.asList("*"));
+            configuration.setAllowedOrigins(List.of("*"));
+            configuration.setAllowedMethods(List.of("*"));
+            configuration.setAllowedHeaders(List.of("*"));
             return configuration;
         }));
         http.authorizeHttpRequests((request) -> request
@@ -117,6 +120,6 @@ public class SecurityConfig {
 //         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 //         source.registerCorsConfiguration("/**", configuration);
 //         return source;
-    }
+//    }
 
 }

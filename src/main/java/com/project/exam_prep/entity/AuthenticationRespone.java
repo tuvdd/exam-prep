@@ -14,5 +14,5 @@ public class AuthenticationRespone {
     private String jwt;
     private String role;
     private String error;
-    private UserDto userDto;
+//    private UserDto userDto;
 }

@@ -1,7 +1,9 @@
 package com.project.exam_prep.service.impl;
 
+import com.project.exam_prep.dto.QuizDto;
 import com.project.exam_prep.dto.ResultDto;
 import com.project.exam_prep.dto.StudentDto;
+import com.project.exam_prep.entity.Quiz;
 import com.project.exam_prep.entity.Result;
 import com.project.exam_prep.mapper.ResultMappper;
 import com.project.exam_prep.repo.ResultRepo;
@@ -11,9 +13,7 @@ import com.project.exam_prep.service.ResultService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class ResultServiceImpl implements ResultService {
@@ -30,7 +30,7 @@ public class ResultServiceImpl implements ResultService {
     @Override
     public List<ResultDto> getResultByQuiz(int quizId) {
         List<ResultDto> resultDtoList = new ArrayList<>();
-        Set<Integer> studentIds = quizService.getQuizById(quizId).orElse(null).getStudentIds();
+        Set<Integer> studentIds = quizService.getQuizById(quizId).map(QuizDto::getStudentIds).orElse(new HashSet<>());
 //        System.out.println(studentIds.toString());
         List<Result> resultList = resultRepo.getResultsByQuizId(quizId);
         List<Integer> testedStudentIds = new ArrayList<>();
@@ -46,8 +46,8 @@ public class ResultServiceImpl implements ResultService {
                             0,
                             null,
                             null,
-                            quizId,
-                            new StudentDto(studentRepo.findById(studentId).orElse(null))));
+                            studentId,
+                            quizId));
                 }
             }
         }
