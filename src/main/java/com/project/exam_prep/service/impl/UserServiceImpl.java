@@ -90,7 +90,7 @@ public class UserServiceImpl implements UserService {
 
         User user = userRepo.getUserById(userDto.getId());
         if(user == null) return null;
-        user.setPassword(encodePassword);
+
         user.setFirstName(userDto.getFirstName());
         user.setLastName(userDto.getLastName());
         user.setProfilePicture(userDto.getProfilePicture());
@@ -98,6 +98,22 @@ public class UserServiceImpl implements UserService {
         user.setAddress(userDto.getAddress());
         user.setPhoneNumber(userDto.getPhoneNumber());
         user.setRole(user.getRole());
+
+        userRepo.save(user);
+        return user;
+    }
+
+    @Override
+    public User changePassword(UserDto userDto) {
+        if (userDto.getUsername() == null || userDto.getPassword() == null) {
+            return null;
+        }
+        String encodePassword = encoder.encode(userDto.getPassword());
+
+        User user = userRepo.getUserById(userDto.getId());
+        if(user == null) return null;
+
+        user.setPassword(encodePassword);
 
         userRepo.save(user);
         return user;

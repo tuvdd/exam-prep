@@ -24,8 +24,8 @@ public class ResultMappper {
                 resultDto.getScore(),
                 resultDto.getStartTime(),
                 resultDto.getEndTime(),
-                studentMapper.covertToEntity(resultDto.getStudentDto()),
-//                studentRepo.findById(resultDto.getStudentId()).orElse(null),
+//                studentMapper.covertToEntity(resultDto.getStudentDto()),
+                studentRepo.getStudentById(resultDto.getStudentId()),
                 quizRepo.findById(resultDto.getQuizId()).orElse(null));
 
     }

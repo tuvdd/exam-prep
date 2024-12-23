@@ -1,5 +1,6 @@
 package com.project.exam_prep.entity;
 
+import com.project.exam_prep.dto.UserDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,4 +14,5 @@ public class AuthenticationRespone {
     private String jwt;
     private String role;
     private String error;
+    private UserDto userDto;
 }
