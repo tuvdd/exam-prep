@@ -12,6 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class AuthenticationRespone {
     private String jwt;
+    private String role;
     private String error;
     private UserDto userDto;
 }

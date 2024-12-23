@@ -2,20 +2,28 @@ package com.project.exam_prep.controller;
 
 import com.project.exam_prep.dto.*;
 import com.project.exam_prep.service.*;
+import com.project.exam_prep.util.JwtUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("api/teacher")
 public class TeacherController {
     @Autowired
+    private UserService userService;
+    @Autowired
     private TeacherService teacherService;
+    @Autowired
+    private StudentService studentService;
     @Autowired
     private QuestionService questionService;
     @Autowired
@@ -24,6 +32,8 @@ public class TeacherController {
     private QuizService quizService;
     @Autowired
     private ResultService resultService;
+    @Autowired
+    private JwtUtil jwtUtil;
 
     //    ===============================TEACHER===============================
     @GetMapping("/{teacherId}")
@@ -32,6 +42,33 @@ public class TeacherController {
         if(teacherDto.getId() == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         return ResponseEntity.ok(teacherDto);
     }
+
+    @GetMapping("/info")
+    public ResponseEntity<?> getTeacherInfo(HttpServletRequest request) {
+        String authorizationHeader = request.getHeader("Authorization");
+        String jwtToken = authorizationHeader.substring(7); //Bearer
+        UserDto userDto = userService.getUserInfo(jwtUtil.extractUsername(jwtToken));
+        System.out.println(userDto);
+        if(userDto == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return ResponseEntity.ok(teacherService.getTeacherByUserId(userDto.getId()));
+    }
+
+    //    ===============================STUDENT===============================
+    @GetMapping("/student/{studentId}")
+    public ResponseEntity<?> getStudentById(@PathVariable int studentId) {
+        StudentDto studentDto = studentService.getStudentById(studentId);
+        if(studentDto.getId() == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return ResponseEntity.ok(studentDto);
+    }
+
+    @GetMapping("/student/all/{teacherId}")
+    public ResponseEntity<?> getStudentByTeacherId(@PathVariable int teacherId) {
+        Set<SimpleStudentDto> studentDtos = studentService.getStudentsByTeacherId(teacherId);
+        if(studentDtos.isEmpty()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return ResponseEntity.ok(studentDtos);
+    }
+
+
 
     //    ===============================QUESTION===============================
     @PostMapping("/question/save")
@@ -111,8 +148,8 @@ public class TeacherController {
 
 
     @GetMapping("/question-set/all/{teacherId}")
-    public ResponseEntity<List<QuestionSetDto>> getQuestionSetsByTeacherId(@PathVariable Integer teacherId) {
-        List<QuestionSetDto> questionSets = questionSetService.getAllQuestionSetByTeacherId(teacherId);
+    public ResponseEntity<?> getQuestionSetsByTeacherId(@PathVariable Integer teacherId) {
+        List<SimpleQuestionSetDto> questionSets = questionSetService.getAllQuestionSetByTeacherId(teacherId);
         return ResponseEntity.ok(questionSets);
     }
 
