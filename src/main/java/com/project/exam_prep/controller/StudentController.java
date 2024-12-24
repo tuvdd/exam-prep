@@ -64,7 +64,7 @@ public class StudentController {
         return  new ResponseEntity<>("Failed to add Result", HttpStatus.BAD_REQUEST);
     }
 
-    @GetMapping("student-quiz")
+    @GetMapping("/student-quiz")
     public ResponseEntity<?> getResultByQuizAndStudent(@RequestBody Integer quizId,
                                                        @RequestBody Integer studentId) {
         ResultDto resultDto = resultService.getResultByQuizAndStudent(quizId, studentId);
@@ -100,4 +100,12 @@ public class StudentController {
         if(check) return ResponseEntity.ok().build();
         else return ResponseEntity.badRequest().build();
     }
+
+    @GetMapping("/student-answer/{studentId}/{quizId}")
+    public  ResponseEntity<?> getAllStudentAnswer(@PathVariable Integer studentId,
+                                                  @PathVariable Integer quizId) {
+        List<StudentAnswerDto> studentAnswerDtos = studentAnswerService.getStudentAnswersByQuizIdAndStudentId(quizId, studentId);
+        return ResponseEntity.ok(studentAnswerDtos);
+    }
+
 }

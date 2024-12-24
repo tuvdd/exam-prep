@@ -5,11 +5,13 @@ import com.project.exam_prep.entity.Answer;
 import com.project.exam_prep.entity.StudentAnswer;
 import com.project.exam_prep.mapper.StudentAnswerMapper;
 import com.project.exam_prep.repo.AnswerRepo;
+import com.project.exam_prep.repo.QuizRepo;
 import com.project.exam_prep.repo.StudentAnswerRepo;
 import com.project.exam_prep.service.StudentAnswerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -20,6 +22,8 @@ public class StudentAnswerServiceImpl implements StudentAnswerService {
     private StudentAnswerRepo studentAnswerRepo;
     @Autowired
     private AnswerRepo answerRepo;
+    @Autowired
+    private QuizRepo quizRepo;
     @Autowired
     private StudentAnswerMapper studentAnswerMapper;
     @Override
@@ -62,6 +66,21 @@ public class StudentAnswerServiceImpl implements StudentAnswerService {
             studentAnswerRepo.save(studentAnswer);
         }
         return true;
+    }
+
+    @Override
+    public List<StudentAnswerDto> getStudentAnswersByQuizIdAndStudentId(int quizId, int studentId) {
+        List<StudentAnswerDto> result = new ArrayList<>();
+        List<StudentAnswer> studentAnswers = studentAnswerRepo.findStudentAnswersByQuizIdAndStudentId(quizId, studentId);
+        int x = quizRepo.getQuizById(quizId).getQuestionSet().getQuestions().size();
+        System.out.println(x);
+        System.out.println(studentAnswers.size());
+        studentAnswers = studentAnswers.subList(studentAnswers.size() - x, studentAnswers.size());
+        for(StudentAnswer studentAnswer: studentAnswers) {
+            result.add(new StudentAnswerDto(studentAnswer));
+        }
+
+        return result;
     }
 
 }

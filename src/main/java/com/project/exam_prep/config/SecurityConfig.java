@@ -80,7 +80,7 @@ public class SecurityConfig {
                                 .hasRole("TEACHER")
                 .requestMatchers("api/student/**")
                                 .hasRole("STUDENT")
-                .requestMatchers("/api/authenticate","/api/authenticate/**")
+                .requestMatchers("/api/authenticate","/api/authenticate/**", "/api/image/**")
                                 .permitAll()
                 .anyRequest().authenticated()
         );
