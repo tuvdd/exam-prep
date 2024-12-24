@@ -10,4 +10,6 @@ public interface StudentAnswerService {
     boolean checkStudentAnswer(StudentAnswerDto studentAnswerDto);
     Double calculateScore(List<StudentAnswerDto> studentAnswerDtos);
     boolean saveStudentAnswer(List<StudentAnswerDto> studentAnswerDtos);
+
+    List<StudentAnswerDto> getStudentAnswersByQuizIdAndStudentId(int StudentId, int studentId);
 }
