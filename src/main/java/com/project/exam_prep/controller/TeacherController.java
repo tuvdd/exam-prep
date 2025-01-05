@@ -99,8 +99,8 @@ public class TeacherController {
     }
 
     @GetMapping("/question/all/{teacherId}")
-    public ResponseEntity<List<QuestionDto>> getAllQuestionsByTeacherId(@PathVariable Integer teacherId) {
-        List<QuestionDto> questions = questionService.getAllQuestionsByTeacherId(teacherId);
+    public ResponseEntity<?> getAllQuestionsByTeacherId(@PathVariable Integer teacherId) {
+        List<SimpleQuestionDto> questions = questionService.getAllQuestionsByTeacherId(teacherId);
         return ResponseEntity.ok(questions);
     }
 

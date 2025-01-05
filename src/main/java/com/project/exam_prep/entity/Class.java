@@ -25,12 +25,7 @@ public class Class {
     @Column(nullable = false)
     private Integer grade;
 
-    @ManyToMany
-    @JoinTable(
-            name = "class_student",
-            joinColumns = @JoinColumn(name = "class_id"),
-            inverseJoinColumns = @JoinColumn(name = "student_id")
-    )
+    @OneToMany(mappedBy = "currentClass", cascade = CascadeType.ALL)
     private Set<Student> students = new HashSet<>();
 
     @ManyToMany

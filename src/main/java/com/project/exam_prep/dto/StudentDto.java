@@ -3,7 +3,6 @@ package com.project.exam_prep.dto;
 import com.project.exam_prep.entity.Class;
 import com.project.exam_prep.entity.Quiz;
 import com.project.exam_prep.entity.Student;
-import com.project.exam_prep.entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,7 +19,7 @@ public class StudentDto {
     private Integer id;
     private String studentCode;
     private UserDto userDto;
-    private Set<ClassDto> classDtoSet;
+    private ClassDto classDto;
     private Set<QuizDto> quizDtoSet;
 
     public StudentDto(Student student) {
@@ -28,17 +27,9 @@ public class StudentDto {
             this.id = student.getId();
             this.studentCode = student.getStudentCode();
             this.userDto = new UserDto(student.getUser());
-            this.classDtoSet = getClassDtoSet(student.getClasses());
+            this.classDto = student.getCurrentClass() != null ? new ClassDto(student.getCurrentClass()) : null;
             this.quizDtoSet = getQuizDtoSet(student.getQuizzes());
         }
-    }
-
-    public Set<ClassDto> getClassDtoSet(Set<Class> classes) {
-        Set<ClassDto> result = new HashSet<>();
-        for(Class aClass: classes) {
-            result.add(new ClassDto(aClass));
-        }
-        return result;
     }
 
     public Set<QuizDto> getQuizDtoSet(Set<Quiz> quizzes) {

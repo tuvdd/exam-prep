@@ -73,16 +73,17 @@ public class SecurityConfig {
         http.authorizeHttpRequests((request) -> request
 //                trong db luu role la ROLE_STUDENT (STUDENT la loi)
 
-                .requestMatchers("/api/admin/**",
-                        "/api/export/admin/**")
-                                .hasRole("ADMIN")
-                .requestMatchers("/api/teacher/**")
-                                .hasRole("TEACHER")
-                .requestMatchers("api/student/**")
-                                .hasRole("STUDENT")
-                .requestMatchers("/api/authenticate","/api/authenticate/**", "/api/image/**")
-                                .permitAll()
-                .anyRequest().authenticated()
+//                .requestMatchers("/api/admin/**",
+//                        "/api/export/admin/**")
+//                                .hasRole("ADMIN")
+//                .requestMatchers("/api/teacher/**")
+//                                .hasRole("TEACHER")
+//                .requestMatchers("api/student/**")
+//                                .hasRole("STUDENT")
+//                .requestMatchers("/api/authenticate","/api/authenticate/**", "/api/image/**")
+//                                .permitAll()
+//                .anyRequest().authenticated()
+                        .anyRequest().permitAll()
         );
 //                .sessionManagement(sesstion -> sesstion.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);

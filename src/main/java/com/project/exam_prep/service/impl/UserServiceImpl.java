@@ -4,6 +4,7 @@ import com.project.exam_prep.dto.UserDto;
 import com.project.exam_prep.entity.User;
 import com.project.exam_prep.repo.UserRepo;
 import com.project.exam_prep.service.UserService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
 
     @Autowired

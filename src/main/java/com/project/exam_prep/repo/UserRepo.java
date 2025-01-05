@@ -15,4 +15,6 @@ public interface UserRepo extends JpaRepository<User, Integer> {
     User getUserById(Integer id);
 
     User findByUsername(String username);
+
+    long countByRole(String student);
 }

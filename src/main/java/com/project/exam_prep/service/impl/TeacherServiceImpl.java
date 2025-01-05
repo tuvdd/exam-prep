@@ -7,6 +7,7 @@ import com.project.exam_prep.entity.User;
 import com.project.exam_prep.repo.TeacherRepo;
 import com.project.exam_prep.repo.UserRepo;
 import com.project.exam_prep.service.TeacherService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 @Service
+@Transactional
 public class TeacherServiceImpl implements TeacherService {
 
     @Autowired

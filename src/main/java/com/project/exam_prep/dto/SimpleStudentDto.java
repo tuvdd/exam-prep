@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Getter
@@ -17,13 +16,13 @@ public class SimpleStudentDto {
     private String firstName;
     private String lastName;
     private String studentCode;
-    private Set<ClassDto> classDtos;
+    private ClassDto classDto;
 
     public SimpleStudentDto(Student student) {
         this.id = student.getId();
         this.firstName = student.getUser().getFirstName();
         this.lastName = student.getUser().getLastName();
         this.studentCode = student.getStudentCode();
-        this.classDtos = student.getClasses().stream().map(ClassDto::new).collect(Collectors.toSet());
+        this.classDto = new ClassDto(student.getCurrentClass());
     }
 }
