@@ -1,5 +1,6 @@
 package com.project.exam_prep.filter;
 
+import com.project.exam_prep.service.TokenService;
 import com.project.exam_prep.service.impl.CustomUserDetailsServiceImpl;
 import com.project.exam_prep.util.JwtUtil;
 import org.springframework.stereotype.Component;
@@ -25,6 +26,9 @@ public class JwtRequestFilter extends OncePerRequestFilter{
     private JwtUtil jwtUtil;
 
     @Autowired
+    private TokenService tokenService;
+
+    @Autowired
     private CustomUserDetailsServiceImpl userDetailsService;
 
     @Override
@@ -37,7 +41,7 @@ public class JwtRequestFilter extends OncePerRequestFilter{
             jwt = authHeader.substring(7);
             username=jwtUtil.extractUsername(jwt);
         }
-        if(username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+        if(username != null && SecurityContextHolder.getContext().getAuthentication() == null ) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
             if(jwtUtil.validateToken(jwt, userDetails.getUsername())) {
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(

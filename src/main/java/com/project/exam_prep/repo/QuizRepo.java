@@ -13,9 +13,15 @@ import java.util.Optional;
 public interface QuizRepo extends JpaRepository<Quiz, Integer> {
 
     Quiz getQuizById(Integer id);
+    // Tìm tất cả quiz có questionSetId nhất định
+    @Query("SELECT q FROM Quiz q WHERE q.questionSet.id = :questionSetId")
+    List<Quiz> findByQuestionSetId(Integer questionSetId);
 
     @Query("SELECT q FROM Quiz q JOIN q.students s WHERE s.id = :studentId")
     List<Quiz> findAllByStudentId(@Param("studentId") Integer studentId);
 
     List<Quiz> findAllByTeacherId(Integer teacherId);
+    // Tìm tất cả các quiz có chứa câu hỏi với questionId
+    @Query("SELECT q FROM Quiz q JOIN q.questionSet qs JOIN qs.questions qsq WHERE qsq.id = :questionId")
+    List<Quiz> findAllByQuestionId(Integer questionId);
 }

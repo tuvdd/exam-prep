@@ -8,6 +8,7 @@ import com.project.exam_prep.repo.AnswerRepo;
 import com.project.exam_prep.repo.QuizRepo;
 import com.project.exam_prep.repo.StudentAnswerRepo;
 import com.project.exam_prep.service.StudentAnswerService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.Set;
 
 @Service
+@Transactional
 public class StudentAnswerServiceImpl implements StudentAnswerService {
 
     @Autowired

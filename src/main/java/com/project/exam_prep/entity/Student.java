@@ -28,8 +28,9 @@ public class Student {
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
 
-    @ManyToMany(mappedBy = "students")
-    private Set<Class> classes = new HashSet<>();
+    @ManyToOne
+    @JoinColumn(name = "class_id")
+    private Class currentClass;
 
     @ManyToMany(mappedBy = "students", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.PERSIST})
     private Set<Quiz> quizzes = new HashSet<>();

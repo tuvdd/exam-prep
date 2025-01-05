@@ -10,12 +10,14 @@ import com.project.exam_prep.repo.ResultRepo;
 import com.project.exam_prep.repo.StudentRepo;
 import com.project.exam_prep.service.QuizService;
 import com.project.exam_prep.service.ResultService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 @Service
+@Transactional
 public class ResultServiceImpl implements ResultService {
 
     @Autowired

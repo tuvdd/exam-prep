@@ -14,8 +14,6 @@ public class ResultMappper {
     private StudentRepo studentRepo;
     @Autowired
     private QuizRepo quizRepo;
-    @Autowired
-    private StudentMapper studentMapper;
 
     public Result convertToEntity(ResultDto resultDto) {
 
@@ -24,7 +22,6 @@ public class ResultMappper {
                 resultDto.getScore(),
                 resultDto.getStartTime(),
                 resultDto.getEndTime(),
-//                studentMapper.covertToEntity(resultDto.getStudentDto()),
                 studentRepo.getStudentById(resultDto.getStudentId()),
                 quizRepo.findById(resultDto.getQuizId()).orElse(null));
 

@@ -8,6 +8,7 @@ import com.project.exam_prep.repo.ClassRepo;
 import com.project.exam_prep.repo.StudentRepo;
 import com.project.exam_prep.repo.TeacherRepo;
 import com.project.exam_prep.service.ClassService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class ClassServiceImpl implements ClassService {
     @Autowired
     private StudentRepo studentRepo;
@@ -30,23 +32,29 @@ public class ClassServiceImpl implements ClassService {
         newClass.setGrade(detailClassDto.getGrade());
         newClass.setName(detailClassDto.getName());
         newClass.setStudents(new HashSet<>());
-        for(SimpleStudentDto studentDto: detailClassDto.getSimpleStudentDtos()) {
-            if (studentDto.getId() != null) {
-                studentRepo.findById(studentDto.getId()).ifPresent(student -> {
-                    newClass.getStudents().add(student);
-                    student.getClasses().add(newClass);
-                });
+        if (detailClassDto.getSimpleStudentDtos() != null) {
+            for(SimpleStudentDto studentDto: detailClassDto.getSimpleStudentDtos()) {
+                if (studentDto.getId() != null) {
+                    studentRepo.findById(studentDto.getId()).ifPresent(student -> {
+                        newClass.getStudents().add(student);
+                        student.setCurrentClass(newClass);
+                    });
+                }
             }
         }
+
         newClass.setTeachers(new HashSet<>());
-        for(SimpleTeacherDto teacherDto : detailClassDto.getSimpleTeacherDtos()) {
-            if (teacherDto.getId() != null) {
-                teacherRepo.findById(teacherDto.getId()).ifPresent(teacher -> {
-                    newClass.getTeachers().add(teacher);
-                    teacher.getClasses().add(newClass);
-                });
+        if (detailClassDto.getSimpleTeacherDtos() != null) {
+            for(SimpleTeacherDto teacherDto : detailClassDto.getSimpleTeacherDtos()) {
+                if (teacherDto.getId() != null) {
+                    teacherRepo.findById(teacherDto.getId()).ifPresent(teacher -> {
+                        newClass.getTeachers().add(teacher);
+                        teacher.getClasses().add(newClass);
+                    });
+                }
             }
         }
+
         Class savedClass = classRepo.save(newClass);
         return true;
     }
@@ -72,7 +80,7 @@ public class ClassServiceImpl implements ClassService {
                 if (studentDto.getId() != null) {
                     studentRepo.findById(studentDto.getId()).ifPresent(student -> {
                         oldClass.getStudents().add(student);
-                        student.getClasses().add(oldClass);
+                        student.setCurrentClass(oldClass);
                     });
                 }
             }

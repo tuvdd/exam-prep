@@ -16,22 +16,14 @@ public class DetailStudentDto {
     private Integer id;
     private String studentCode;
     private UserDto userDto;
-    private Set<ClassDto> classDtoSet;
+    private ClassDto classDto;
 
     public DetailStudentDto(Student student) {
         if (student != null) {
             this.id = student.getId();
             this.studentCode = student.getStudentCode();
             this.userDto = new UserDto(student.getUser());
-            this.classDtoSet = getClassDtoSet(student.getClasses());
+            this.classDto = student.getCurrentClass() != null ? new ClassDto(student.getCurrentClass()) : null;
         }
-    }
-
-    public Set<ClassDto> getClassDtoSet(Set<Class> classes) {
-        Set<ClassDto> result = new HashSet<>();
-        for (Class aClass : classes) {
-            result.add(new ClassDto(aClass));
-        }
-        return result;
     }
 }

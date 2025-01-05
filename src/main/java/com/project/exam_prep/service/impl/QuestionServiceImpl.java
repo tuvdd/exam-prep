@@ -1,27 +1,32 @@
 package com.project.exam_prep.service.impl;
 
 import com.project.exam_prep.dto.QuestionDto;
+import com.project.exam_prep.dto.SimpleQuestionDto;
 import com.project.exam_prep.entity.Answer;
 import com.project.exam_prep.entity.Question;
 import com.project.exam_prep.entity.QuestionImage;
 import com.project.exam_prep.mapper.QuestionMapper;
 import com.project.exam_prep.repo.QuestionRepo;
+import com.project.exam_prep.repo.QuizRepo;
 import com.project.exam_prep.repo.TeacherRepo;
 import com.project.exam_prep.service.QuestionService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class QuestionServiceImpl implements QuestionService {
     @Autowired
     private QuestionRepo questionRepo;
     @Autowired
     private TeacherRepo teacherRepo;
+    @Autowired
+    private QuizRepo quizRepo;
     @Autowired
     private QuestionMapper questionMapper;
 
@@ -51,8 +56,8 @@ public class QuestionServiceImpl implements QuestionService {
         return questionRepo.getAllQuestions();
     }
 
-    public List<QuestionDto> getAllQuestionsByTeacherId(Integer teacherId) {
-        return questionRepo.findAllByTeacherId(teacherId).stream().map(QuestionDto::new).toList();
+    public List<SimpleQuestionDto> getAllQuestionsByTeacherId(Integer teacherId) {
+        return questionRepo.findAllByTeacherId(teacherId).stream().map(SimpleQuestionDto::new).toList();
     }
     @Override
     public QuestionDto updateQuestion(QuestionDto questionDto) {
@@ -82,6 +87,9 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public boolean deleteQuestionById(Integer id) {
         if (id != null) {
+            int numberOfUseInQuiz = quizRepo.findAllByQuestionId(id).size();
+            System.out.println(numberOfUseInQuiz);
+            if (numberOfUseInQuiz > 0) return false;
             questionRepo.deleteById(id);
             return true;
         }

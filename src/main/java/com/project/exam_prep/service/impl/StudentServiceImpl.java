@@ -12,6 +12,7 @@ import com.project.exam_prep.repo.StudentRepo;
 
 import com.project.exam_prep.repo.UserRepo;
 import com.project.exam_prep.service.StudentService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class StudentServiceImpl implements StudentService {
 
     @Autowired
@@ -60,15 +62,8 @@ public class StudentServiceImpl implements StudentService {
         if(user == null) return null;
         student.setStudentCode(studentDto.getStudentCode());
         student.setUser(user);
-        student.getClasses().clear();
-        student.getClasses().addAll((studentDto.getClassDtoSet()).stream().map(classDto -> {
-                    Class existClass = classRepo.findById(classDto.getId()).orElse(null);
-                    if (existClass != null) {
-                        existClass.getStudents().add(student);
-                    }
-                    return existClass;
-                }
-                ).filter(Objects::nonNull).collect(Collectors.toSet()));
+        Optional<Class> currentClass = classRepo.findById(studentDto.getClassDto().getId());
+        currentClass.ifPresent(student::setCurrentClass);
 
         studentRepo.save(student);
         return new StudentDto(studentRepo.getStudentById(studentDto.getId()));
@@ -115,17 +110,12 @@ public class StudentServiceImpl implements StudentService {
         student = new Student(
                 studentDto.getId(),
                 studentDto.getStudentCode(),
-                user, new HashSet<>(), new HashSet<>(), new HashSet<>()
+                user, null, new HashSet<>(), new HashSet<>()
         );
-        student.getClasses().addAll((studentDto.getClassDtoSet()).stream().map(classDto -> {
-                    Class existClass = classRepo.findById(classDto.getId()).orElse(null);
-                    if (existClass != null) {
-                        existClass.getStudents().add(student);
-                    }
-                    return existClass;
-                }
-        ).filter(Objects::nonNull).collect(Collectors.toSet()));
-
+        if (studentDto.getClassDto() != null) {
+            Optional<Class> currentClass = classRepo.findById(studentDto.getClassDto().getId());
+            currentClass.ifPresent(student::setCurrentClass);
+        }
         studentRepo.save(student);
         return true;
     }

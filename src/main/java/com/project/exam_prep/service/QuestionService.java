@@ -1,6 +1,7 @@
 package com.project.exam_prep.service;
 
 import com.project.exam_prep.dto.QuestionDto;
+import com.project.exam_prep.dto.SimpleQuestionDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,7 +13,7 @@ public interface QuestionService {
     boolean addQuestion(QuestionDto questionDto);
     boolean addQuestions(List<QuestionDto> questionDtos);
     Optional<QuestionDto> getQuestionById(Integer id);
-    List<QuestionDto> getAllQuestionsByTeacherId(Integer teacherId);
+    List<SimpleQuestionDto> getAllQuestionsByTeacherId(Integer teacherId);
     List<QuestionDto> getAllQuestions();
     QuestionDto updateQuestion(QuestionDto questionDto);
     boolean deleteQuestionById(Integer id);
