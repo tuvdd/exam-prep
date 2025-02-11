@@ -1,11 +1,11 @@
-# System Overview
+# Exam-Prep System Overview
 
 This system is built to manage and evaluate online exams for high schools, offering key features for Admin, Teachers, and Students.
 
 ## Technology Stack
 
 - **Backend**: Java Spring Boot
-- **Frontend**: React Hook
+- **Frontend**: React Hook, JavaScript
 - **Database**: MySQL, AWS S3 (for image storage)
 
 ## Features
